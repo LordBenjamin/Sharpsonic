@@ -1,0 +1,14 @@
+version: '3.4'
+
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    volumes:
+        - /host_mnt/d/Users/Ben/Documents/Audiobooks:/music
+    ports:
+    - "32772:443"
+    - "32773:80"
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
