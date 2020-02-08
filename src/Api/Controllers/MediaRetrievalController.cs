@@ -41,9 +41,30 @@ namespace Api.Controllers
         public ActionResult GetCoverArt(int id)
         {
             MediaIndexEntry entry = Index.Entries
-                .Where(i => i.Id == id || (i.ParentId == id && !i.IsFolder))
-                .OrderByDescending(i => i.IsFolder) // Prefer folders for now
+                .Where(i => i.Id == id)
                 .FirstOrDefault();
+
+            bool originalIsFolder = entry.IsFolder;
+
+            if (!originalIsFolder)
+            {
+                using (var id3File = TagLib.File.Create(entry.Path))
+                {
+                    var image = id3File.Tag.Pictures
+                        .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
+                        .FirstOrDefault();
+
+                    if (image != null)
+                    {
+                        return new FileContentResult(image.Data.Data, image.MimeType);
+                    }
+                }
+
+                // Nothing in the MP3 file, so let's try to get an image from the parent folder
+                entry = Index.Entries
+                    .Where(i => i.Id == entry.ParentId)
+                    .FirstOrDefault();
+            }
 
             Debug.Assert(entry.IsFolder);
 
@@ -53,6 +74,29 @@ namespace Api.Controllers
 
             if(file == null)
             {
+                // If the request was for a folder and there is no image file,
+                // try to find an image in the MP3 files
+                if (originalIsFolder)
+                {
+                    entry = Index.Entries
+                        .Where(i => i.ParentId == entry.Id)
+                        .FirstOrDefault();
+
+                    using (var id3File = TagLib.File.Create(entry.Path))
+                    {
+                        var image = id3File.Tag.Pictures
+                            .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
+                            .FirstOrDefault();
+
+                        if (image != null)
+                        {
+                            return new FileContentResult(image.Data.Data, image.MimeType);
+                        }
+                    }
+
+                    // Nothing in the MP3 file either
+                }
+
                 return new FileContentResult(Array.Empty<byte>(), "image/jpeg");
             }
 

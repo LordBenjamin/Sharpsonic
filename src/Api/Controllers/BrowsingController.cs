@@ -69,8 +69,14 @@ namespace Api.Controllers
                             title = i.Name,
                             album = dir.Name,
                             isDir = i.IsFolder,
+                            track = i.TrackNumber ?? 0,
+                            trackSpecified = i.TrackNumber.HasValue,
                             coverArt = (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
                         })
+                        .OrderBy(i => i.trackSpecified)
+                        .ThenBy(i => i.album)
+                        .ThenBy(i => i.track)
+                        .ThenBy(i => i.title)
                         .ToArray(),
                 },
                 ItemElementName = ItemChoiceType.directory,
@@ -115,6 +121,7 @@ namespace Api.Controllers
                         .ToArray(),
                     name = g.Key,
                 })
+                .OrderBy(i => i.name)
                 .ToArray();
         }
     }

@@ -11,6 +11,7 @@ namespace Api.Media
         public int ParentId { get; set; }
 
         public string Path { get; set; }
+        public int? TrackNumber { get; set; }
 
         internal Stream OpenReadStream()
         {

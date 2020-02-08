@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Api.Media
 {
@@ -29,9 +30,11 @@ namespace Api.Media
         private void Scan(int parentId, ref int i, DirectoryInfo info)
         {
             int folderId = i;
-            AddEntry(parentId, i++, info);
+            MediaIndexEntry directoryEntry = AddDirectoryEntry(parentId, i++, info);
 
             var fileSystemEntries = info.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly);
+
+            HashSet<string> albumNames = new HashSet<string>();
 
             foreach (FileSystemInfo info2 in fileSystemEntries)
             {
@@ -39,23 +42,60 @@ namespace Api.Media
                 {
                     Scan(folderId, ref i, directoryInfo);
                 }
-                else if(info2.Name.EndsWith(".mp3"))
+                else if (info2.Name.EndsWith(".mp3"))
                 {
-                    AddEntry(folderId, i++, info2);
+                    string title;
+                    int? trackNumber;
+
+                    using (var file = TagLib.File.Create(info2.FullName))
+                    {
+                        title = file.Tag?.Title ??
+                            Path.GetFileNameWithoutExtension(info2.Name);
+
+                        trackNumber = (int)file.Tag?.Track;
+
+                        string album = file.Tag?.Album?.Trim();
+
+                        if (!string.IsNullOrWhiteSpace(album))
+                        {
+                            albumNames.Add(album);
+                        }
+                    }
+
+                    AddEntry(folderId, i++,
+                        name: title,
+                        path: info2.FullName,
+                        trackNumber: trackNumber);
                 }
+            }
+
+            if(albumNames.Count == 1)
+            {
+                directoryEntry.Name = albumNames.Single();
             }
         }
 
-        private void AddEntry(int parentId, int index, FileSystemInfo info)
+
+        private MediaIndexEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info)
         {
-            Entries.Add(new MediaIndexEntry
+            return AddEntry(parentId, index, info.Name, info.FullName, isFolder: true);
+        }
+
+        private MediaIndexEntry AddEntry(int parentId, int id, string name, string path, bool isFolder = false, int? trackNumber = null)
+        {
+            var entry = new MediaIndexEntry
             {
-                Id = index,
+                Id = id,
                 ParentId = parentId,
-                IsFolder = info is DirectoryInfo,
-                Name = info.Name,
-                Path = info.FullName,
-            });
+                IsFolder = isFolder,
+                Name = name,
+                Path = path,
+                TrackNumber = trackNumber,
+            };
+
+            Entries.Add(entry);
+
+            return entry;
         }
     }
 }
