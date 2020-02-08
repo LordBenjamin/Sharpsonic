@@ -34,8 +34,12 @@ namespace Api.Middleware
 
             if (isAuthenticated)
             {
-                var claims = new[] { new Claim("name", userName), new Claim(ClaimTypes.Role, "User") };
-                var identity = new ClaimsIdentity(claims, "Basic");
+                Claim[] claims = new[] {
+                    new Claim("name", userName),
+                    new Claim(ClaimTypes.Role, "User"),
+                };
+
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "Basic");
                 context.User = new ClaimsPrincipal(identity);
             }
             else
