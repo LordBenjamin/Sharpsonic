@@ -15,6 +15,8 @@ namespace Api
         public static Dictionary<string, string> arrayDict = new Dictionary<string, string>
         {
             {"ApplicationSettings:MusicSourceDirectory", "/music"},
+            {"ApplicationSettings:UserName", "A"},
+            {"ApplicationSettings:Password", "b"},
         };
 
         public static void Main(string[] args)

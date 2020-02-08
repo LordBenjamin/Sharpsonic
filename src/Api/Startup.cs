@@ -1,4 +1,5 @@
 using Api.Media;
+using Api.Middleware;
 using Api.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,13 +43,14 @@ namespace Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            } else
+            {
+                app.UseHttpsRedirection();
             }
-
-            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseSubsonicAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
