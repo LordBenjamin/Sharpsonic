@@ -8,32 +8,25 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Api.Serialization
-{
-    public class CustomXmlSerializerOutputFormatter : XmlSerializerOutputFormatter
-    {
+namespace Api.Serialization {
+    public class CustomXmlSerializerOutputFormatter : XmlSerializerOutputFormatter {
         public CustomXmlSerializerOutputFormatter()
-            : base()
-        {
+            : base() {
         }
 
         public CustomXmlSerializerOutputFormatter(ILoggerFactory loggerFactory)
-            : base(loggerFactory)
-        {
+            : base(loggerFactory) {
         }
 
         public CustomXmlSerializerOutputFormatter(XmlWriterSettings writerSettings)
-            : base(writerSettings)
-        {
+            : base(writerSettings) {
         }
 
         public CustomXmlSerializerOutputFormatter(XmlWriterSettings writerSettings, ILoggerFactory loggerFactory)
-            : base(writerSettings, loggerFactory)
-        {
+            : base(writerSettings, loggerFactory) {
         }
 
-        protected override void Serialize(XmlSerializer xmlSerializer, XmlWriter xmlWriter, object value)
-        {
+        protected override void Serialize(XmlSerializer xmlSerializer, XmlWriter xmlWriter, object value) {
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add("", "http://subsonic.org/restapi");
 

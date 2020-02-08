@@ -6,19 +6,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Api.Controllers
-{
+namespace Api.Controllers {
     [Route("rest")]
     [ApiController]
     [Produces("application/xml")]
-    public class MediaRetrievalController : ControllerBase
-    {
+    public class MediaRetrievalController : ControllerBase {
         private readonly string musicPath;
 
         public MediaIndex Index { get; }
 
-        public MediaRetrievalController(IOptions<ApplicationSettings> appSettings, MediaIndex index)
-        {
+        public MediaRetrievalController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
             musicPath = appSettings.Value.MusicSourceDirectory;
             Index = index;
         }
@@ -26,8 +23,7 @@ namespace Api.Controllers
         [HttpGet]
         [Route("stream")]
         [Route("stream.view")]
-        public FileStreamResult StreamFile(int id)
-        {
+        public FileStreamResult StreamFile(int id) {
             MediaIndexEntry entry = Index.Entries
                 .Where(i => i.Id == id)
                 .FirstOrDefault();
@@ -38,24 +34,20 @@ namespace Api.Controllers
         [HttpGet]
         [Route("getCoverArt")]
         [Route("getCoverArt.view")]
-        public ActionResult GetCoverArt(int id)
-        {
+        public ActionResult GetCoverArt(int id) {
             MediaIndexEntry entry = Index.Entries
                 .Where(i => i.Id == id)
                 .FirstOrDefault();
 
             bool originalIsFolder = entry.IsFolder;
 
-            if (!originalIsFolder)
-            {
-                using (var id3File = TagLib.File.Create(entry.Path))
-                {
+            if (!originalIsFolder) {
+                using (var id3File = TagLib.File.Create(entry.Path)) {
                     var image = id3File.Tag.Pictures
                         .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
                         .FirstOrDefault();
 
-                    if (image != null)
-                    {
+                    if (image != null) {
                         return new FileContentResult(image.Data.Data, image.MimeType);
                     }
                 }
@@ -72,24 +64,20 @@ namespace Api.Controllers
                 .EnumerateFiles("*.jpg")
                 .FirstOrDefault();
 
-            if(file == null)
-            {
+            if (file == null) {
                 // If the request was for a folder and there is no image file,
                 // try to find an image in the MP3 files
-                if (originalIsFolder)
-                {
+                if (originalIsFolder) {
                     entry = Index.Entries
                         .Where(i => i.ParentId == entry.Id)
                         .FirstOrDefault();
 
-                    using (var id3File = TagLib.File.Create(entry.Path))
-                    {
+                    using (var id3File = TagLib.File.Create(entry.Path)) {
                         var image = id3File.Tag.Pictures
                             .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
                             .FirstOrDefault();
 
-                        if (image != null)
-                        {
+                        if (image != null) {
                             return new FileContentResult(image.Data.Data, image.MimeType);
                         }
                     }

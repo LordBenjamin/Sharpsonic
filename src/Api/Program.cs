@@ -8,10 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Api
-{
-    public class Program
-    {
+namespace Api {
+    public class Program {
         public static Dictionary<string, string> arrayDict = new Dictionary<string, string>
         {
             {"ApplicationSettings:MusicSourceDirectory", "/music"},
@@ -19,19 +17,16 @@ namespace Api
             {"ApplicationSettings:Password", "b"},
         };
 
-        public static void Main(string[] args)
-        {
+        public static void Main(string[] args) {
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) => Host
             .CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
+            .ConfigureAppConfiguration((hostingContext, config) => {
                 config.AddInMemoryCollection(arrayDict);
             })
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
+            .ConfigureWebHostDefaults(webBuilder => {
                 webBuilder.UseStartup<Startup>();
             });
     }

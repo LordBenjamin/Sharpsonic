@@ -2,15 +2,12 @@
 using System.IO;
 using System.Linq;
 
-namespace Api.Media
-{
+namespace Api.Media {
 
-    public class MediaIndex
-    {
+    public class MediaIndex {
         private readonly Dictionary<int, MediaIndexEntry> entriesByParentId = new Dictionary<int, MediaIndexEntry>();
 
-        public MediaIndex(string folder)
-        {
+        public MediaIndex(string folder) {
             Folder = folder;
         }
 
@@ -18,8 +15,7 @@ namespace Api.Media
 
         public List<MediaIndexEntry> Entries { get; } = new List<MediaIndexEntry>();
 
-        public void Scan()
-        {
+        public void Scan() {
             Entries.Clear();
             entriesByParentId.Clear();
 
@@ -27,8 +23,7 @@ namespace Api.Media
             Scan(-1, ref i, new DirectoryInfo(Folder));
         }
 
-        private void Scan(int parentId, ref int i, DirectoryInfo info)
-        {
+        private void Scan(int parentId, ref int i, DirectoryInfo info) {
             int folderId = i;
             MediaIndexEntry directoryEntry = AddDirectoryEntry(parentId, i++, info);
 
@@ -36,19 +31,15 @@ namespace Api.Media
 
             HashSet<string> albumNames = new HashSet<string>();
 
-            foreach (FileSystemInfo info2 in fileSystemEntries)
-            {
-                if (info2 is DirectoryInfo directoryInfo)
-                {
+            foreach (FileSystemInfo info2 in fileSystemEntries) {
+                if (info2 is DirectoryInfo directoryInfo) {
                     Scan(folderId, ref i, directoryInfo);
                 }
-                else if (info2.Name.EndsWith(".mp3"))
-                {
+                else if (info2.Name.EndsWith(".mp3")) {
                     string title;
                     int? trackNumber;
 
-                    using (var file = TagLib.File.Create(info2.FullName))
-                    {
+                    using (var file = TagLib.File.Create(info2.FullName)) {
                         title = file.Tag?.Title ??
                             Path.GetFileNameWithoutExtension(info2.Name);
 
@@ -56,8 +47,7 @@ namespace Api.Media
 
                         string album = file.Tag?.Album?.Trim();
 
-                        if (!string.IsNullOrWhiteSpace(album))
-                        {
+                        if (!string.IsNullOrWhiteSpace(album)) {
                             albumNames.Add(album);
                         }
                     }
@@ -69,22 +59,18 @@ namespace Api.Media
                 }
             }
 
-            if(albumNames.Count == 1)
-            {
+            if (albumNames.Count == 1) {
                 directoryEntry.Name = albumNames.Single();
             }
         }
 
 
-        private MediaIndexEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info)
-        {
+        private MediaIndexEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info) {
             return AddEntry(parentId, index, info.Name, info.FullName, isFolder: true);
         }
 
-        private MediaIndexEntry AddEntry(int parentId, int id, string name, string path, bool isFolder = false, int? trackNumber = null)
-        {
-            var entry = new MediaIndexEntry
-            {
+        private MediaIndexEntry AddEntry(int parentId, int id, string name, string path, bool isFolder = false, int? trackNumber = null) {
+            var entry = new MediaIndexEntry {
                 Id = id,
                 ParentId = parentId,
                 IsFolder = isFolder,
