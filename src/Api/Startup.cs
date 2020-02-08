@@ -43,6 +43,8 @@ namespace Api {
 
             app.UseRouting();
 
+            app.RequireCompatibleSubsonicApiClient();
+
             app.UseSubsonicAuthentication();
 
             app.UseEndpoints(endpoints => {
