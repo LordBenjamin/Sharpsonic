@@ -28,7 +28,8 @@ namespace Api.Media {
             int folderId = i;
             MediaIndexEntry directoryEntry = AddDirectoryEntry(parentId, i++, info);
 
-            var fileSystemEntries = info.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly);
+            IEnumerable<FileSystemInfo> fileSystemEntries =
+                info.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly);
 
             HashSet<string> albumNames = new HashSet<string>();
 

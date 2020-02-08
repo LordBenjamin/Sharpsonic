@@ -1,10 +1,9 @@
+using Api.DataTransfer;
 using Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 
 namespace Api.Controllers {
@@ -74,9 +73,9 @@ namespace Api.Controllers {
                             track = i.TrackNumber ?? 0,
                             trackSpecified = i.TrackNumber.HasValue,
                             coverArt =  (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
-                            duration = i.Duration.HasValue ? (int)Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
+                            duration = i.Duration.HasValue ? (int)System.Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
                             durationSpecified = i.Duration.HasValue,
-                            path = Path.GetRelativePath(rootDir.Path, i.Path),
+                            path = System.IO.Path.GetRelativePath(rootDir.Path, i.Path),
                         })
                         .OrderBy(i => i.trackSpecified)
                         .ThenBy(i => i.album)
