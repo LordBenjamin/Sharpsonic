@@ -1,4 +1,4 @@
-﻿using Api.Media;
+using Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -43,7 +43,7 @@ namespace Api.Controllers {
 
             if (!originalIsFolder) {
                 using (var id3File = TagLib.File.Create(entry.Path)) {
-                    var image = id3File.Tag.Pictures
+                    TagLib.IPicture image = id3File.Tag.Pictures
                         .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
                         .FirstOrDefault();
 
@@ -73,7 +73,7 @@ namespace Api.Controllers {
                         .FirstOrDefault();
 
                     using (var id3File = TagLib.File.Create(entry.Path)) {
-                        var image = id3File.Tag.Pictures
+                        TagLib.IPicture image = id3File.Tag.Pictures
                             .OrderByDescending(i => i.Type == TagLib.PictureType.FrontCover)
                             .FirstOrDefault();
 
