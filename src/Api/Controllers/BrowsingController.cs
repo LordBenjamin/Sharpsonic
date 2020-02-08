@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace Api.Controllers {
@@ -48,11 +49,19 @@ namespace Api.Controllers {
                 .Where(i => i.Id == id)
                 .SingleOrDefault();
 
+            MediaIndexEntry rootDir = dir;
+            while (rootDir.ParentId >= 0) {
+                rootDir = Index.Entries
+                    .Where(i => i.Id == rootDir.ParentId)
+                    .SingleOrDefault();
+            }
+
+
             return new Response {
                 Item = new Directory {
                     id = dir.Id.ToString(CultureInfo.InvariantCulture),
                     name = dir.Name,
-                    parent = id.ToString(CultureInfo.InvariantCulture),
+                    parent = dir.ParentId.ToString(CultureInfo.InvariantCulture),
                     child = Index.Entries
                         .Where(i => i.ParentId == id)
                         .Select(i => new Child {
@@ -67,6 +76,7 @@ namespace Api.Controllers {
                             coverArt =  i.Id.ToString(CultureInfo.InvariantCulture),
                             duration = i.Duration.HasValue ? (int)Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
                             durationSpecified = i.Duration.HasValue,
+                            path = Path.GetRelativePath(rootDir.Path, i.Path),
                         })
                         .OrderBy(i => i.trackSpecified)
                         .ThenBy(i => i.album)
@@ -75,6 +85,7 @@ namespace Api.Controllers {
                         .ToArray(),
                 },
                 ItemElementName = ItemChoiceType.directory,
+                version = "1.14.0",
             };
         }
 
