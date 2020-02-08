@@ -1,6 +1,7 @@
-﻿using Api.Media;
+using Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -49,18 +50,23 @@ namespace Api.Controllers {
 
             return new Response {
                 Item = new Directory {
+                    id = dir.Id.ToString(CultureInfo.InvariantCulture),
                     name = dir.Name,
+                    parent = id.ToString(CultureInfo.InvariantCulture),
                     child = Index.Entries
                         .Where(i => i.ParentId == id)
                         .Select(i => new Child {
                             id = i.Id.ToString(CultureInfo.InvariantCulture),
                             parent = i.ParentId.ToString(CultureInfo.InvariantCulture),
+                            artist = i.Artist,
                             title = i.Name,
                             album = dir.Name,
                             isDir = i.IsFolder,
                             track = i.TrackNumber ?? 0,
                             trackSpecified = i.TrackNumber.HasValue,
-                            coverArt = (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
+                            coverArt =  i.Id.ToString(CultureInfo.InvariantCulture),
+                            duration = i.Duration.HasValue ? (int)Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
+                            durationSpecified = i.Duration.HasValue,
                         })
                         .OrderBy(i => i.trackSpecified)
                         .ThenBy(i => i.album)

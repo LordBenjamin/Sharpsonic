@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -36,26 +37,42 @@ namespace Api.Media {
                     Scan(folderId, ref i, directoryInfo);
                 }
                 else if (info2.Name.EndsWith(".mp3")) {
-                    string title;
-                    int? trackNumber;
+                    string artist = null;
+                    string title = null;
+                    int? trackNumber = null;
+                    TimeSpan? duration = null;
 
                     using (var file = TagLib.File.Create(info2.FullName)) {
-                        title = file.Tag?.Title ??
-                            Path.GetFileNameWithoutExtension(info2.Name);
+                        if (file.Tag != null) {
+                            title = file.Tag.Title ??
+                                Path.GetFileNameWithoutExtension(info2.Name);
 
-                        trackNumber = (int)file.Tag?.Track;
+                            trackNumber = file.Tag.Track > 0 ?
+                                (int)file.Tag.Track : (int?)null;
 
-                        string album = file.Tag?.Album?.Trim();
+                            string album = file.Tag.Album?.Trim();
 
-                        if (!string.IsNullOrWhiteSpace(album)) {
-                            albumNames.Add(album);
+                            if (!string.IsNullOrWhiteSpace(album)) {
+                                albumNames.Add(album);
+                            }
+
+                            artist = !string.IsNullOrWhiteSpace(file.Tag.JoinedAlbumArtists) ? file.Tag.JoinedAlbumArtists?.Trim() :
+                                !string.IsNullOrWhiteSpace(file.Tag.FirstAlbumArtist) ? file.Tag.FirstAlbumArtist?.Trim() :
+                                !string.IsNullOrWhiteSpace(file.Tag.FirstPerformer) ? file.Tag.FirstPerformer?.Trim() :
+#pragma warning disable CS0618 // Type or member is obsolete
+                                 file.Tag.Artists?.Length > 0 ? string.Join('/', file.Tag.Artists): null;
+#pragma warning restore CS0618 // Type or member is obsolete
+
+                            duration = file.Properties.Duration;
                         }
                     }
 
                     AddEntry(folderId, i++,
                         name: title,
                         path: info2.FullName,
-                        trackNumber: trackNumber);
+                        trackNumber: trackNumber,
+                        artist: artist,
+                        duration: duration);
                 }
             }
 
@@ -69,7 +86,10 @@ namespace Api.Media {
             return AddEntry(parentId, index, info.Name, info.FullName, isFolder: true);
         }
 
-        private MediaIndexEntry AddEntry(int parentId, int id, string name, string path, bool isFolder = false, int? trackNumber = null) {
+        private MediaIndexEntry AddEntry(
+            int parentId, int id, string name, string path, bool isFolder = false,
+            int? trackNumber = null, string artist = null, TimeSpan? duration = null) {
+
             var entry = new MediaIndexEntry {
                 Id = id,
                 ParentId = parentId,
@@ -77,6 +97,8 @@ namespace Api.Media {
                 Name = name,
                 Path = path,
                 TrackNumber = trackNumber,
+                Artist = artist,
+                Duration = duration,
             };
 
             Entries.Add(entry);
