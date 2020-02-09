@@ -7,6 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Controllers {
+    [Route("rest")]
+    [ApiController]
+    [Produces("application/xml")]
     public class MediaScanningController {
         public MediaScanningController(MediaIndex index) {
             Index = index;
