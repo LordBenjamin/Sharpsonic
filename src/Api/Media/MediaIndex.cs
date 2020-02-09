@@ -6,7 +6,7 @@ using System.Linq;
 namespace Api.Media {
 
     public class MediaIndex {
-        private readonly Dictionary<int, MediaIndexEntry> entriesByParentId = new Dictionary<int, MediaIndexEntry>();
+        private readonly object scanLockObject = new object();
 
         public MediaIndex(string folder) {
             Folder = folder;
@@ -16,12 +16,25 @@ namespace Api.Media {
 
         public List<MediaIndexEntry> Entries { get; } = new List<MediaIndexEntry>();
 
+        public bool IsScanInProgress { get; private set; }
+
         public void Scan() {
+            lock (scanLockObject) {
+                if (IsScanInProgress) {
+                    return;
+                }
+
+                IsScanInProgress = true;
+            }
+
             Entries.Clear();
-            entriesByParentId.Clear();
 
             int i = 0;
             Scan(-1, ref i, new DirectoryInfo(Folder));
+
+            lock (scanLockObject) {
+                IsScanInProgress = false;
+            }
         }
 
         private void Scan(int parentId, ref int i, DirectoryInfo info) {
