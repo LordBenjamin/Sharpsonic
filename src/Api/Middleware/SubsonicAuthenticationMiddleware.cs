@@ -69,7 +69,7 @@ namespace Api.Middleware {
         private async Task WriteAuthFailure(HttpContext context) {
             Version version = SubsonicApiVersioningMiddleware.ServerVersion;
 
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.StatusCode = StatusCodes.Status200OK;
             context.Response.ContentType = "text/xml";
 
             await context.Response.WriteAsync(
