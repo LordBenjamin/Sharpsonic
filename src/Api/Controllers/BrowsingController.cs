@@ -9,7 +9,7 @@ using System.Linq;
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
-    [Produces("application/xml")]
+    [FormatFilter]
     public class BrowsingController : ControllerBase {
         private readonly string musicPath;
 

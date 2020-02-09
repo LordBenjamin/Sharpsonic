@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
-    [Produces("application/xml")]
+    [FormatFilter]
     public class BookmarksController : ControllerBase {
 
         public BookmarksController() {

@@ -7,7 +7,7 @@ using System.Linq;
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
-    [Produces("application/xml")]
+    [FormatFilter]
     public class UserManagementController : ControllerBase {
         public UserManagementController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
             Settings = appSettings.Value;

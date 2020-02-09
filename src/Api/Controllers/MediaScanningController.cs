@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
-    [Produces("application/xml")]
+    [FormatFilter]
     public class MediaScanningController {
         public MediaScanningController(MediaIndex index) {
             Index = index;
