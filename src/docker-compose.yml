@@ -4,10 +4,14 @@ services:
   api:
     image: ${DOCKER_REGISTRY-}sharpsonic
     volumes:
-        - /host_mnt/d/Users/Ben/Documents/Audiobooks:/music
+    - /host_mnt/d/Users/Ben/Documents/Audiobooks:/books
     ports:
     - "32772:443"
     - "32773:80"
+    environment:
+    - "SHARPSONIC_ApplicationSettings__SourceDirectory=/books"
+    - "SHARPSONIC_ApplicationSettings__UserName=user"
+    - "SHARPSONIC_ApplicationSettings__Password=test"
     build:
       context: .
       dockerfile: Api/Dockerfile

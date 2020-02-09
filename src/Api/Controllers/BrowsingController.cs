@@ -16,7 +16,7 @@ namespace Api.Controllers {
         public MediaIndex Index { get; }
 
         public BrowsingController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
-            musicPath = appSettings.Value.MusicSourceDirectory;
+            musicPath = appSettings.Value.SourceDirectory;
             Index = index;
         }
 

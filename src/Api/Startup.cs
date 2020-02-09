@@ -26,7 +26,7 @@ namespace Api {
 
             services.Configure<ApplicationSettings>(section);
 
-            MediaIndex index = new MediaIndex(section.Get<ApplicationSettings>().MusicSourceDirectory);
+            MediaIndex index = new MediaIndex(section.Get<ApplicationSettings>().SourceDirectory);
             index.Scan();
 
             services.AddSingleton(index);
