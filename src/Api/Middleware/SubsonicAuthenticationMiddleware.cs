@@ -70,6 +70,8 @@ namespace Api.Middleware {
             Version version = SubsonicApiVersioningMiddleware.ServerVersion;
 
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "text/xml";
+
             await context.Response.WriteAsync(
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 $"<subsonic-response xmlns=\"http://subsonic.org/restapi\" status=\"failed\" version=\"{version.ToString(3)}\">\n" +

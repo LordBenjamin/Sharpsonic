@@ -24,6 +24,7 @@ namespace Api.Middleware {
 
             if (!Version.TryParse(versionParam, out Version version) || version < MinimumClientVersion) {
                 context.Response.StatusCode = StatusCodes.Status200OK;
+                context.Response.ContentType = "text/xml";
 
                 await context.Response.WriteAsync(
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
