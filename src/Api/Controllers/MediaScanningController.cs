@@ -24,6 +24,8 @@ namespace Api.Controllers {
             return new Response {
                 Item = new ScanStatus() {
                     scanning = Index.IsScanInProgress,
+                    count = Index.Entries.Where(i => !i.IsFolder).Count(),
+                    countSpecified = true,
                 },
                 ItemElementName = ItemChoiceType.scanStatus,
             };
