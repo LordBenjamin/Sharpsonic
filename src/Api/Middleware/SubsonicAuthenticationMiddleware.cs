@@ -39,8 +39,6 @@ namespace Api.Middleware {
                     options.Password, DecodePlaintextPassword(password), StringComparison.Ordinal);
             }
 
-
-
             if (!passwordAccepted) {
                 await WriteAuthFailure(context);
                 return;
