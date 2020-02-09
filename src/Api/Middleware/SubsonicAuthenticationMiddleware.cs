@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Api.Middleware {
+namespace Sharpsonic.Api.Middleware {
     public class SubsonicAuthenticationMiddleware {
         private readonly RequestDelegate _next;
         private readonly ApplicationSettings options;

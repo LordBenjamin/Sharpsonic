@@ -1,10 +1,10 @@
-using Api.DataTransfer;
-using Api.Media;
+using Sharpsonic.Api.DataTransfer;
+using Sharpsonic.Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
 
-namespace Api.Controllers {
+namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [Produces("application/xml")]

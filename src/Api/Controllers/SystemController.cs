@@ -1,7 +1,7 @@
-using Api.DataTransfer;
+using Sharpsonic.Api.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers {
+namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [Produces("application/xml")]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Api.Media {
+namespace Sharpsonic.Api.Media {
 
     public class MediaIndex {
         private readonly object scanLockObject = new object();

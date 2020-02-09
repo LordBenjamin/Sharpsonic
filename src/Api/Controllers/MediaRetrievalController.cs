@@ -1,4 +1,4 @@
-using Api.Media;
+using Sharpsonic.Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Api.Controllers {
+namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [Produces("application/xml")]

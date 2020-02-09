@@ -5,6 +5,8 @@
     <UserSecretsId>89c19a65-e3f3-4a72-bda0-c4edbdd90c39</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <AssemblyName>Sharpsonic.Api</AssemblyName>
+    <RootNamespace>Sharpsonic.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

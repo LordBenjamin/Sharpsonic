@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Api.Media {
+namespace Sharpsonic.Api.Media {
     public class MediaIndexEntry {
         public int Id { get; set; }
         public string Artist { get; set; }

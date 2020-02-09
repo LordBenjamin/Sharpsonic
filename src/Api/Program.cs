@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Api {
+namespace Sharpsonic.Api {
     public class Program {
 
         public static void Main(string[] args) {

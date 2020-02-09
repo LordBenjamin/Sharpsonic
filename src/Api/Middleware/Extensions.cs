@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 
-namespace Api.Middleware {
+namespace Sharpsonic.Api.Middleware {
     public static class Extensions {
         public static IApplicationBuilder UseSubsonicAuthentication(
               this IApplicationBuilder builder) {

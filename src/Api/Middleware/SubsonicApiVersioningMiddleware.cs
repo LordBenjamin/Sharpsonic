@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace Api.Middleware {
+namespace Sharpsonic.Api.Middleware {
     public class SubsonicApiVersioningMiddleware {
         private readonly RequestDelegate _next;
         private readonly ApplicationSettings options;

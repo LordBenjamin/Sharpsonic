@@ -1,13 +1,13 @@
-using Api.Media;
-using Api.Middleware;
-using Api.Serialization;
+using Sharpsonic.Api.Media;
+using Sharpsonic.Api.Middleware;
+using Sharpsonic.Api.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Api {
+namespace Sharpsonic.Api {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
