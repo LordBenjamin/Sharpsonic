@@ -3,6 +3,7 @@ using Sharpsonic.Api.Media;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using Sharpsonic.Api.Settings;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]

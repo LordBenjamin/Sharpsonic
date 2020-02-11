@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Text.Json;
 using Sharpsonic.Api.Formatters;
 using System.Linq;
+using Sharpsonic.Api.Settings;
 
 namespace Sharpsonic.Api {
     public class Startup {
@@ -21,6 +22,12 @@ namespace Sharpsonic.Api {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            IConfigurationSection section = Configuration.GetSection(nameof(ApplicationSettings));
+            services.Configure<ApplicationSettings>(section);
+
+            section = Configuration.GetSection(nameof(MediaLibrarySettings));
+            services.Configure<MediaLibrarySettings>(section);
+
             // Replace FormatFilter with one that is Subsonic URI compatible
             ServiceDescriptor descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(FormatFilter));
             services.Remove(descriptor);
@@ -40,11 +47,8 @@ namespace Sharpsonic.Api {
 
             });
 
-            IConfigurationSection section = Configuration.GetSection("ApplicationSettings");
 
-            services.Configure<ApplicationSettings>(section);
-
-            MediaIndex index = new MediaIndex(section.Get<ApplicationSettings>().SourceDirectory);
+            MediaIndex index = new MediaIndex(section.Get<MediaLibrarySettings>().SourceDirectory);
             index.Scan();
 
             services.AddSingleton(index);

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Sharpsonic.Api.Settings;
 using System;
 using System.Threading.Tasks;
 

@@ -5,18 +5,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Sharpsonic.Api.Settings;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class MediaRetrievalController : ControllerBase {
-        private readonly string musicPath;
-
         public MediaIndex Index { get; }
 
-        public MediaRetrievalController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
-            musicPath = appSettings.Value.SourceDirectory;
+        public MediaRetrievalController(MediaIndex index) {
             Index = index;
         }
 

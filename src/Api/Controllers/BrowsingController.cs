@@ -5,18 +5,16 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sharpsonic.Api.Settings;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class BrowsingController : ControllerBase {
-        private readonly string musicPath;
-
         public MediaIndex Index { get; }
 
-        public BrowsingController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
-            musicPath = appSettings.Value.SourceDirectory;
+        public BrowsingController(MediaIndex index) {
             Index = index;
         }
 

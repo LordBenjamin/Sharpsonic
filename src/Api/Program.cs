@@ -11,9 +11,9 @@ namespace Sharpsonic.Api {
 
         public static IHostBuilder CreateHostBuilder(string[] args) => Host
             .CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) => {
-                config.AddEnvironmentVariables("SHARPSONIC_");
-            })
+                .ConfigureAppConfiguration((buildercontext, config) => {
+                    config.AddJsonFile("/config/appsettings.json", optional: true);
+                })
             .ConfigureWebHostDefaults(webBuilder => {
                 webBuilder.UseStartup<Startup>();
             });

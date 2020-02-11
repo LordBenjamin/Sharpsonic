@@ -1,12 +1,21 @@
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Sharpsonic.Api.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sharpsonic.Api.Media {
 
-    public class MediaIndex {
+    public class MediaIndex : IHostedService {
         private readonly object scanLockObject = new object();
+
+        public MediaIndex(IOptions<MediaLibrarySettings> settings)
+            : this(settings.Value.SourceDirectory) {
+        }
 
         public MediaIndex(string folder) {
             Folder = folder;
@@ -74,7 +83,7 @@ namespace Sharpsonic.Api.Media {
                                 !string.IsNullOrWhiteSpace(file.Tag.FirstAlbumArtist) ? file.Tag.FirstAlbumArtist?.Trim() :
                                 !string.IsNullOrWhiteSpace(file.Tag.FirstPerformer) ? file.Tag.FirstPerformer?.Trim() :
 #pragma warning disable CS0618 // Type or member is obsolete
-                                 file.Tag.Artists?.Length > 0 ? string.Join('/', file.Tag.Artists): null;
+                                 file.Tag.Artists?.Length > 0 ? string.Join('/', file.Tag.Artists) : null;
 #pragma warning restore CS0618 // Type or member is obsolete
 
                             duration = file.Properties.Duration;
@@ -118,6 +127,18 @@ namespace Sharpsonic.Api.Media {
             Entries.Add(entry);
 
             return entry;
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken) {
+            await Task.Run(() => Scan())
+                .ConfigureAwait(false);
+
+            await Task.CompletedTask
+                .ConfigureAwait(false);
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken) {
+            return Task.CompletedTask;
         }
     }
 }
