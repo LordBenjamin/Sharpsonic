@@ -152,9 +152,23 @@ namespace Sharpsonic.Api.Media {
                 .Where(i => i.IsFolder);
         }
 
-        internal MediaLibraryEntry GetFolder(int id) {
+        internal MediaLibraryEntry GetEntry(int id) {
             return Entries
                 .Where(i => i.Id == id)
+                .SingleOrDefault();
+        }
+
+        internal MediaLibraryEntry GetFolder(int id) {
+            return Entries
+                .Where(i => i.IsFolder)
+                .Where(i => i.Id == id)
+                .SingleOrDefault();
+        }
+
+        internal MediaLibraryEntry GetFile(int id) {
+            return Entries
+                .Where(i => !i.IsFolder)
+                .Where(i => i.ParentId == id)
                 .SingleOrDefault();
         }
 
@@ -172,21 +186,6 @@ namespace Sharpsonic.Api.Media {
 
             return rootDir;
         }
-
-        internal MediaLibraryEntry GetEntry(int id) {
-            return Entries
-                .Where(i => i.ParentId == id)
-                .SingleOrDefault();
-        }
-
-        internal MediaLibraryEntry GetFile(int id) {
-            return Entries
-                .Where(i => !i.IsFolder)
-                .Where(i => i.ParentId == id)
-                .SingleOrDefault();
-        }
-
-
 
         internal IEnumerable<MediaLibraryEntry> GetChildEntries(int id) {
             return Entries
