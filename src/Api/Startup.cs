@@ -47,11 +47,8 @@ namespace Sharpsonic.Api {
 
             });
 
-
-            MediaIndex index = new MediaIndex(section.Get<MediaLibrarySettings>().SourceDirectory);
-            index.Scan();
-
-            services.AddSingleton(index);
+            services.AddSingleton<MediaIndex>();
+            services.AddHostedService(p => p.GetService<MediaIndex>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
