@@ -12,9 +12,9 @@ namespace Sharpsonic.Api.Controllers {
     [ApiController]
     [FormatFilter]
     public class BrowsingController : ControllerBase {
-        public MediaIndex Index { get; }
+        public MediaLibraryService Index { get; }
 
-        public BrowsingController(MediaIndex index) {
+        public BrowsingController(MediaLibraryService index) {
             Index = index;
         }
 
@@ -42,11 +42,11 @@ namespace Sharpsonic.Api.Controllers {
         [Route("getMusicDirectory")]
         [Route("getMusicDirectory.view")]
         public ActionResult<Response> GetMusicDirectory(int id) {
-            MediaIndexEntry dir = Index.Entries
+            MediaLibraryEntry dir = Index.Entries
                 .Where(i => i.Id == id)
                 .SingleOrDefault();
 
-            MediaIndexEntry rootDir = dir;
+            MediaLibraryEntry rootDir = dir;
             while (rootDir.ParentId >= 0) {
                 rootDir = Index.Entries
                     .Where(i => i.Id == rootDir.ParentId)
@@ -100,7 +100,7 @@ namespace Sharpsonic.Api.Controllers {
         }
 
         private Index[] SearchIndexes(int? musicFolderId, long ifModifiedSince) {
-            IEnumerable<MediaIndexEntry> entries = Index.Entries
+            IEnumerable<MediaLibraryEntry> entries = Index.Entries
                 .Where(i => i.IsFolder && i.ParentId == 0);
 
             if (musicFolderId.HasValue) {

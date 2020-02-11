@@ -2,7 +2,7 @@ using System;
 using System.IO;
 
 namespace Sharpsonic.Api.Media {
-    public class MediaIndexEntry {
+    public class MediaLibraryEntry {
         public int Id { get; set; }
         public string Artist { get; set; }
         public bool IsFolder { get; set; }

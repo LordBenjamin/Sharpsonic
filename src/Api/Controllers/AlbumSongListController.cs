@@ -12,11 +12,11 @@ namespace Sharpsonic.Api.Controllers {
     [FormatFilter]
     public class AlbumSongListController : ControllerBase {
 
-        public AlbumSongListController(MediaIndex index) {
+        public AlbumSongListController(MediaLibraryService index) {
             Index = index;
         }
 
-        public MediaIndex Index { get; }
+        public MediaLibraryService Index { get; }
 
         [HttpGet]
         [Route("getAlbumList")]
@@ -30,7 +30,7 @@ namespace Sharpsonic.Api.Controllers {
             string genre = null,
             int? musicFolderId = null) {
 
-            IEnumerable<MediaIndexEntry> query = Index.Entries
+            IEnumerable<MediaLibraryEntry> query = Index.Entries
                 .Where(i => i.ParentId >= 0)
                 .Where(i => i.IsFolder);
 

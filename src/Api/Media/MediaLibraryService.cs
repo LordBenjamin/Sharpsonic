@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace Sharpsonic.Api.Media {
 
-    public class MediaIndex : IHostedService {
+    public class MediaLibraryService : IHostedService {
         private readonly object scanLockObject = new object();
 
-        public MediaIndex(IOptions<MediaLibrarySettings> settings)
+        public MediaLibraryService(IOptions<MediaLibrarySettings> settings)
             : this(settings.Value.SourceDirectory) {
         }
 
-        public MediaIndex(string folder) {
+        public MediaLibraryService(string folder) {
             Folder = folder;
         }
 
         public string Folder { get; }
 
-        public List<MediaIndexEntry> Entries { get; } = new List<MediaIndexEntry>();
+        public List<MediaLibraryEntry> Entries { get; } = new List<MediaLibraryEntry>();
 
         public bool IsScanInProgress { get; private set; }
 
@@ -48,7 +48,7 @@ namespace Sharpsonic.Api.Media {
 
         private void Scan(int parentId, ref int i, DirectoryInfo info) {
             int folderId = i;
-            MediaIndexEntry directoryEntry = AddDirectoryEntry(parentId, i++, info);
+            MediaLibraryEntry directoryEntry = AddDirectoryEntry(parentId, i++, info);
 
             IEnumerable<FileSystemInfo> fileSystemEntries =
                 info.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly);
@@ -105,15 +105,15 @@ namespace Sharpsonic.Api.Media {
         }
 
 
-        private MediaIndexEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info) {
+        private MediaLibraryEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info) {
             return AddEntry(parentId, index, info.Name, info.FullName, isFolder: true);
         }
 
-        private MediaIndexEntry AddEntry(
+        private MediaLibraryEntry AddEntry(
             int parentId, int id, string name, string path, bool isFolder = false,
             int? trackNumber = null, string artist = null, TimeSpan? duration = null) {
 
-            var entry = new MediaIndexEntry {
+            var entry = new MediaLibraryEntry {
                 Id = id,
                 ParentId = parentId,
                 IsFolder = isFolder,

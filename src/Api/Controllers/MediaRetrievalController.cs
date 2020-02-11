@@ -12,9 +12,9 @@ namespace Sharpsonic.Api.Controllers {
     [ApiController]
     [FormatFilter]
     public class MediaRetrievalController : ControllerBase {
-        public MediaIndex Index { get; }
+        public MediaLibraryService Index { get; }
 
-        public MediaRetrievalController(MediaIndex index) {
+        public MediaRetrievalController(MediaLibraryService index) {
             Index = index;
         }
 
@@ -22,7 +22,7 @@ namespace Sharpsonic.Api.Controllers {
         [Route("stream")]
         [Route("stream.view")]
         public FileStreamResult StreamFile(int id) {
-            MediaIndexEntry entry = Index.Entries
+            MediaLibraryEntry entry = Index.Entries
                 .Where(i => i.Id == id)
                 .FirstOrDefault();
 
@@ -33,7 +33,7 @@ namespace Sharpsonic.Api.Controllers {
         [Route("getCoverArt")]
         [Route("getCoverArt.view")]
         public ActionResult GetCoverArt(int id) {
-            MediaIndexEntry entry = Index.Entries
+            MediaLibraryEntry entry = Index.Entries
                 .Where(i => i.Id == id)
                 .FirstOrDefault();
 

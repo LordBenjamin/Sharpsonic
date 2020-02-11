@@ -11,11 +11,11 @@ namespace Sharpsonic.Api.Controllers {
     [ApiController]
     [FormatFilter]
     public class MediaScanningController {
-        public MediaScanningController(MediaIndex index) {
+        public MediaScanningController(MediaLibraryService index) {
             Index = index;
         }
 
-        public MediaIndex Index { get; }
+        public MediaLibraryService Index { get; }
 
         [HttpGet]
         [Route("getScanStatus")]

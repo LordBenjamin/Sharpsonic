@@ -10,13 +10,13 @@ namespace Sharpsonic.Api.Controllers {
     [ApiController]
     [FormatFilter]
     public class UserManagementController : ControllerBase {
-        public UserManagementController(IOptions<ApplicationSettings> appSettings, MediaIndex index) {
+        public UserManagementController(IOptions<ApplicationSettings> appSettings, MediaLibraryService index) {
             Settings = appSettings.Value;
             Index = index;
         }
 
         public ApplicationSettings Settings { get; }
-        public MediaIndex Index { get; }
+        public MediaLibraryService Index { get; }
 
         [HttpGet]
         [Route("getUser")]
