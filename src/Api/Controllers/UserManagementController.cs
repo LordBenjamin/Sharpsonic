@@ -50,8 +50,7 @@ namespace Sharpsonic.Api.Controllers {
                     uploadRole = false,
                     videoConversionRole = false,
 
-                    folder = Index.Entries
-                        .Where(i => i.IsFolder && i.ParentId == -1)
+                    folder = Index.GetRootFolders()
                         .Select(i => i.Id)
                         .ToArray(),
                 }

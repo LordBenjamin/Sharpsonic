@@ -25,9 +25,7 @@ namespace Sharpsonic.Api.Controllers {
 
             return new Response {
                 Item = new MusicFolders {
-                    musicFolder = Index.Entries
-                        .Where(i => i.ParentId == -1)
-                        .Where(i => i.IsFolder)
+                    musicFolder = Index.GetRootFolders()
                         .Select(i => new MusicFolder {
                             id = i.Id,
                             name = i.Name,
@@ -42,25 +40,16 @@ namespace Sharpsonic.Api.Controllers {
         [Route("getMusicDirectory")]
         [Route("getMusicDirectory.view")]
         public ActionResult<Response> GetMusicDirectory(int id) {
-            MediaLibraryEntry dir = Index.Entries
-                .Where(i => i.Id == id)
-                .SingleOrDefault();
+            MediaLibraryEntry dir = Index.GetFolder(id);
 
-            MediaLibraryEntry rootDir = dir;
-            while (rootDir.ParentId >= 0) {
-                rootDir = Index.Entries
-                    .Where(i => i.Id == rootDir.ParentId)
-                    .SingleOrDefault();
-            }
-
+            MediaLibraryEntry rootDir = Index.GetRootFolderFor(id);
 
             return new Response {
                 Item = new Directory {
                     id = dir.Id.ToString(CultureInfo.InvariantCulture),
                     name = dir.Name,
                     parent = dir.ParentId.ToString(CultureInfo.InvariantCulture),
-                    child = Index.Entries
-                        .Where(i => i.ParentId == id)
+                    child = Index.GetChildEntries(id)
                         .Select(i => new Child {
                             id = i.Id.ToString(CultureInfo.InvariantCulture),
                             parent = i.ParentId.ToString(CultureInfo.InvariantCulture),
@@ -100,8 +89,7 @@ namespace Sharpsonic.Api.Controllers {
         }
 
         private Index[] SearchIndexes(int? musicFolderId, long ifModifiedSince) {
-            IEnumerable<MediaLibraryEntry> entries = Index.Entries
-                .Where(i => i.IsFolder && i.ParentId == 0);
+            IEnumerable<MediaLibraryEntry> entries = Index.GetChildFolders(0);
 
             if (musicFolderId.HasValue) {
                 entries = entries.Where(i => i.ParentId == musicFolderId.Value);

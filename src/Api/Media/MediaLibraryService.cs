@@ -104,7 +104,6 @@ namespace Sharpsonic.Api.Media {
             }
         }
 
-
         private MediaLibraryEntry AddDirectoryEntry(int parentId, int index, FileSystemInfo info) {
             return AddEntry(parentId, index, info.Name, info.FullName, isFolder: true);
         }
@@ -139,6 +138,77 @@ namespace Sharpsonic.Api.Media {
 
         public Task StopAsync(CancellationToken cancellationToken) {
             return Task.CompletedTask;
+        }
+
+        internal IEnumerable<MediaLibraryEntry> GetNonRootFolders() {
+            return Entries
+                .Where(i => i.ParentId >= 0)
+                .Where(i => i.IsFolder);
+        }
+
+        internal IEnumerable<MediaLibraryEntry> GetRootFolders() {
+            return Entries
+                .Where(i => i.ParentId == -1)
+                .Where(i => i.IsFolder);
+        }
+
+        internal MediaLibraryEntry GetFolder(int id) {
+            return Entries
+                .Where(i => i.Id == id)
+                .SingleOrDefault();
+        }
+
+        internal MediaLibraryEntry GetRootFolderFor(int id) {
+            return GetRootFolderFor(GetFolder(id));
+        }
+
+        internal MediaLibraryEntry GetRootFolderFor(MediaLibraryEntry dir) {
+            MediaLibraryEntry rootDir = dir;
+            while (rootDir.ParentId >= 0) {
+                rootDir = Entries
+                    .Where(i => i.Id == rootDir.ParentId)
+                    .SingleOrDefault();
+            }
+
+            return rootDir;
+        }
+
+        internal MediaLibraryEntry GetEntry(int id) {
+            return Entries
+                .Where(i => i.ParentId == id)
+                .SingleOrDefault();
+        }
+
+        internal MediaLibraryEntry GetFile(int id) {
+            return Entries
+                .Where(i => !i.IsFolder)
+                .Where(i => i.ParentId == id)
+                .SingleOrDefault();
+        }
+
+
+
+        internal IEnumerable<MediaLibraryEntry> GetChildEntries(int id) {
+            return Entries
+                .Where(i => i.ParentId == id);
+        }
+
+        internal IEnumerable<MediaLibraryEntry> GetChildFolders(int id) {
+            return Entries
+                .Where(i => i.IsFolder)
+                .Where(i => i.ParentId == id);
+        }
+
+        internal IEnumerable<MediaLibraryEntry> GetChildFiles(int id) {
+            return Entries
+                .Where(i => !i.IsFolder)
+                .Where(i => i.ParentId == id);
+        }
+
+        internal long GetFileCount() {
+            return Entries
+                .Where(i => !i.IsFolder)
+                .Count();
         }
     }
 }

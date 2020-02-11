@@ -30,9 +30,7 @@ namespace Sharpsonic.Api.Controllers {
             string genre = null,
             int? musicFolderId = null) {
 
-            IEnumerable<MediaLibraryEntry> query = Index.Entries
-                .Where(i => i.ParentId >= 0)
-                .Where(i => i.IsFolder);
+            IEnumerable<MediaLibraryEntry> query = Index.GetNonRootFolders();
 
             if (musicFolderId.HasValue) {
                 query = query.Where(i => i.ParentId == musicFolderId.Value);

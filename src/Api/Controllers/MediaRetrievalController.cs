@@ -22,9 +22,7 @@ namespace Sharpsonic.Api.Controllers {
         [Route("stream")]
         [Route("stream.view")]
         public FileStreamResult StreamFile(int id) {
-            MediaLibraryEntry entry = Index.Entries
-                .Where(i => i.Id == id)
-                .FirstOrDefault();
+            MediaLibraryEntry entry = Index.GetFile(id);
 
             return new FileStreamResult(entry.OpenReadStream(), "audio/mp3");
         }
@@ -33,9 +31,7 @@ namespace Sharpsonic.Api.Controllers {
         [Route("getCoverArt")]
         [Route("getCoverArt.view")]
         public ActionResult GetCoverArt(int id) {
-            MediaLibraryEntry entry = Index.Entries
-                .Where(i => i.Id == id)
-                .FirstOrDefault();
+            MediaLibraryEntry entry = Index.GetEntry(id);
 
             bool originalIsFolder = entry.IsFolder;
 
@@ -51,9 +47,7 @@ namespace Sharpsonic.Api.Controllers {
                 }
 
                 // Nothing in the MP3 file, so let's try to get an image from the parent folder
-                entry = Index.Entries
-                    .Where(i => i.Id == entry.ParentId)
-                    .FirstOrDefault();
+                entry = Index.GetFolder(entry.ParentId);
             }
 
             Debug.Assert(entry.IsFolder);
@@ -66,8 +60,7 @@ namespace Sharpsonic.Api.Controllers {
                 // If the request was for a folder and there is no image file,
                 // try to find an image in the MP3 files
                 if (originalIsFolder) {
-                    entry = Index.Entries
-                        .Where(i => i.ParentId == entry.Id)
+                    entry = Index.GetChildFiles(entry.Id)
                         .FirstOrDefault();
 
                     using (var id3File = TagLib.File.Create(entry.Path)) {

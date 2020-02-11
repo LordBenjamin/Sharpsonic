@@ -24,7 +24,7 @@ namespace Sharpsonic.Api.Controllers {
             return new Response {
                 Item = new ScanStatus() {
                     scanning = Index.IsScanInProgress,
-                    count = Index.Entries.Where(i => !i.IsFolder).Count(),
+                    count = Index.GetFileCount(),
                     countSpecified = true,
                 },
                 ItemElementName = ItemChoiceType.scanStatus,
