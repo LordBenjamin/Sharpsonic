@@ -109,6 +109,20 @@ namespace Sharpsonic.Api.Media.InMemory {
             return entriesByPath.Get(fullName);
         }
 
+        internal void UpdateLastPlayed(int id) {
+            DateTime now = DateTime.UtcNow;
+            MediaLibraryEntry entry = GetEntry(id);
+
+            entry.LastPlayedUtc = now;
+
+            // If this is a file, also update the parent folder
+            if(!entry.IsFolder) {
+                entry = GetEntry(entry.ParentId);
+
+                entry.LastPlayedUtc = now;
+            }
+        }
+
         internal void RemoveEntry(MediaLibraryEntry entry) {
             Entries.Remove(entry);
             entriesById.Remove(entry);

@@ -47,6 +47,12 @@ namespace Sharpsonic.Api.Controllers {
             } else if (type == "alphabeticalByArtist") {
                 query = query.OrderBy(i => i.Artist)
                     .ThenBy(i => i.Name);
+            } else if (type == "newest") {
+                query = query.OrderByDescending(i => i.AddedUtc)
+                    .ThenBy(i => i.Name);
+            } else if (type == "recent") {
+                query = query.OrderByDescending(i => i.LastPlayedUtc)
+                    .ThenBy(i => i.Name);
             }
 
             query = query

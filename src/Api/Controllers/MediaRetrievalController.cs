@@ -26,6 +26,8 @@ namespace Sharpsonic.Api.Controllers {
         public FileStreamResult StreamFile(int id) {
             MediaLibraryEntry entry = Index.GetFile(id);
 
+            Index.UpdateLastPlayed(id);
+
             return new FileStreamResult(entry.OpenReadStream(), "audio/mp3");
         }
 
