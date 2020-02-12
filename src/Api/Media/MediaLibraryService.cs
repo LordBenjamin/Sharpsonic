@@ -13,8 +13,16 @@ namespace Sharpsonic.Api.Media {
     public class MediaLibraryService : IHostedService {
         private readonly object scanLockObject = new object();
 
+        private readonly UniqueIndex<int, MediaLibraryEntry> entriesById;
+        private readonly NonUniqueIndex<int, MediaLibraryEntry> entriesByParentId;
+        private readonly NonUniqueIndex<bool, MediaLibraryEntry> entriesByIsFolder;
+
         public MediaLibraryService(IOptions<MediaLibrarySettings> settings)
             : this(settings.Value.SourceDirectory) {
+
+            entriesById = new UniqueIndex<int, MediaLibraryEntry>(v => v.Id);
+            entriesByParentId = new NonUniqueIndex<int, MediaLibraryEntry>(v => v.ParentId);
+            entriesByIsFolder = new NonUniqueIndex<bool, MediaLibraryEntry>(v => v.IsFolder);
         }
 
         public MediaLibraryService(string folder) {
@@ -37,6 +45,9 @@ namespace Sharpsonic.Api.Media {
             }
 
             Entries.Clear();
+            entriesById.Clear();
+            entriesByParentId.Clear();
+            entriesByIsFolder.Clear();
 
             int i = 0;
             Scan(-1, ref i, new DirectoryInfo(Folder));
@@ -124,6 +135,9 @@ namespace Sharpsonic.Api.Media {
             };
 
             Entries.Add(entry);
+            entriesByParentId.Add(entry);
+            entriesById.Add(entry);
+            entriesByIsFolder.Add(entry);
 
             return entry;
         }
@@ -147,29 +161,22 @@ namespace Sharpsonic.Api.Media {
         }
 
         internal IEnumerable<MediaLibraryEntry> GetRootFolders() {
-            return Entries
-                .Where(i => i.ParentId == -1)
+            return entriesByParentId.Get(-1)
                 .Where(i => i.IsFolder);
         }
 
         internal MediaLibraryEntry GetEntry(int id) {
-            return Entries
-                .Where(i => i.Id == id)
-                .SingleOrDefault();
+            return entriesById.Get(id);
         }
 
         internal MediaLibraryEntry GetFolder(int id) {
-            return Entries
-                .Where(i => i.IsFolder)
-                .Where(i => i.Id == id)
-                .SingleOrDefault();
+            MediaLibraryEntry item = entriesById.Get(id);
+            return item.IsFolder ? item : null;
         }
 
         internal MediaLibraryEntry GetFile(int id) {
-            return Entries
-                .Where(i => !i.IsFolder)
-                .Where(i => i.ParentId == id)
-                .SingleOrDefault();
+            MediaLibraryEntry item = entriesById.Get(id);
+            return item.IsFolder ? null : item;
         }
 
         internal MediaLibraryEntry GetRootFolderFor(int id) {
@@ -179,35 +186,28 @@ namespace Sharpsonic.Api.Media {
         internal MediaLibraryEntry GetRootFolderFor(MediaLibraryEntry dir) {
             MediaLibraryEntry rootDir = dir;
             while (rootDir.ParentId >= 0) {
-                rootDir = Entries
-                    .Where(i => i.Id == rootDir.ParentId)
-                    .SingleOrDefault();
+                rootDir = entriesById.Get(rootDir.ParentId);
             }
 
             return rootDir;
         }
 
         internal IEnumerable<MediaLibraryEntry> GetChildEntries(int id) {
-            return Entries
-                .Where(i => i.ParentId == id);
+            return entriesByParentId.Get(id);
         }
 
         internal IEnumerable<MediaLibraryEntry> GetChildFolders(int id) {
-            return Entries
-                .Where(i => i.IsFolder)
-                .Where(i => i.ParentId == id);
+            return GetChildEntries(id)
+                .Where(i => i.IsFolder);
         }
 
         internal IEnumerable<MediaLibraryEntry> GetChildFiles(int id) {
-            return Entries
-                .Where(i => !i.IsFolder)
-                .Where(i => i.ParentId == id);
+            return GetChildEntries(id)
+                .Where(i => !i.IsFolder);
         }
 
         internal long GetFileCount() {
-            return Entries
-                .Where(i => !i.IsFolder)
-                .Count();
+            return entriesByIsFolder.Get(false)?.Count ?? 0;
         }
     }
 }
