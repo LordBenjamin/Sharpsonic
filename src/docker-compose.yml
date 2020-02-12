@@ -5,7 +5,6 @@ services:
     image: ${DOCKER_REGISTRY-}sharpsonic
     volumes:
     - /host_mnt/d/Users/Ben/Documents/Audiobooks:/books
-    - ./src/Api/appsettings.Development.json:/config/appsettings.json
     ports:
     - "32772:443"
     - "32773:80"
