@@ -12,6 +12,7 @@ namespace Sharpsonic.Api.Media {
         public string Path { get; set; }
         public int? TrackNumber { get; set; }
         public TimeSpan? Duration { get; set; }
+        public DateTime AddedUtc { get; set; }
 
         internal Stream OpenReadStream() {
             if (IsFolder) {

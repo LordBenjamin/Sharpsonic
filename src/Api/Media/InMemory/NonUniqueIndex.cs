@@ -33,5 +33,11 @@ namespace Sharpsonic.Api.Media.InMemory {
         internal void Clear() {
             dictionary.Clear();
         }
+
+        internal void Remove(TValue value) {
+            if (dictionary.TryGetValue(getKey(value), out List<TValue> list)) {
+                list.Remove(value);
+            }
+        }
     }
 }

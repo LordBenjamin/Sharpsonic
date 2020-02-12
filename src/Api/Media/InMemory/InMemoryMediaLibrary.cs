@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,6 +10,7 @@ namespace Sharpsonic.Api.Media.InMemory {
     public class InMemoryMediaLibrary {
 
         private readonly UniqueIndex<int, MediaLibraryEntry> entriesById;
+        private readonly UniqueIndex<string, MediaLibraryEntry> entriesByPath;
         private readonly NonUniqueIndex<int, MediaLibraryEntry> entriesByParentId;
         private readonly NonUniqueIndex<bool, MediaLibraryEntry> entriesByIsFolder;
 
@@ -18,6 +20,7 @@ namespace Sharpsonic.Api.Media.InMemory {
             : this(settings.Value.SourceDirectory) {
 
             entriesById = new UniqueIndex<int, MediaLibraryEntry>(v => v.Id);
+            entriesByPath = new UniqueIndex<string, MediaLibraryEntry>(v => v.Path);
             entriesByParentId = new NonUniqueIndex<int, MediaLibraryEntry>(v => v.ParentId);
             entriesByIsFolder = new NonUniqueIndex<bool, MediaLibraryEntry>(v => v.IsFolder);
         }
@@ -35,6 +38,7 @@ namespace Sharpsonic.Api.Media.InMemory {
 
             Entries.Add(entry);
             entriesById.Add(entry);
+            entriesByPath.Add(entry);
             entriesByIsFolder.Add(entry);
             entriesByParentId.Add(entry);
 
@@ -50,6 +54,10 @@ namespace Sharpsonic.Api.Media.InMemory {
         internal IEnumerable<MediaLibraryEntry> GetRootFolders() {
             return entriesByParentId.Get(-1)
                 .Where(i => i.IsFolder);
+        }
+
+        internal IEnumerable<MediaLibraryEntry> GetAllEntries() {
+            return Entries.AsReadOnly();
         }
 
         internal MediaLibraryEntry GetEntry(int id) {
@@ -95,6 +103,18 @@ namespace Sharpsonic.Api.Media.InMemory {
 
         internal long GetFileCount() {
             return entriesByIsFolder.Get(false)?.Count ?? 0;
+        }
+
+        internal MediaLibraryEntry GetEntryByPath(string fullName) {
+            return entriesByPath.Get(fullName);
+        }
+
+        internal void RemoveEntry(MediaLibraryEntry entry) {
+            Entries.Remove(entry);
+            entriesById.Remove(entry);
+            entriesByPath.Remove(entry);
+            entriesByParentId.Remove(entry);
+            entriesByIsFolder.Remove(entry);
         }
     }
 }

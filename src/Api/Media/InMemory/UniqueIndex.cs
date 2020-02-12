@@ -25,5 +25,9 @@ namespace Sharpsonic.Api.Media.InMemory {
         internal void Clear() {
             dictionary.Clear();
         }
+
+        internal void Remove(TValue value) {
+            dictionary.Remove(getKey(value));
+        }
     }
 }
