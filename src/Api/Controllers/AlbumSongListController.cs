@@ -51,7 +51,8 @@ namespace Sharpsonic.Api.Controllers {
                 query = query.OrderByDescending(i => i.AddedUtc)
                     .ThenBy(i => i.Name);
             } else if (type == "recent") {
-                query = query.OrderByDescending(i => i.LastPlayedUtc)
+                query = query.Where(i => i.LastPlayedUtc.HasValue)
+                    .OrderByDescending(i => i.LastPlayedUtc)
                     .ThenBy(i => i.Name);
             }
 
