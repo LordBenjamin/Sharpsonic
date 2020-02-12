@@ -5,17 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class MediaScanningController {
-        public MediaScanningController(MediaLibraryService index) {
-            Index = index;
+        public MediaScanningController(InMemoryMediaLibrary index, MediaScanner scanner) {
+            Index = index ?? throw new ArgumentNullException(nameof(index));
+            Scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
         }
 
-        public MediaLibraryService Index { get; }
+        public InMemoryMediaLibrary Index { get; }
+        public MediaScanner Scanner { get; }
 
         [HttpGet]
         [Route("getScanStatus")]
@@ -23,7 +26,7 @@ namespace Sharpsonic.Api.Controllers {
         public ActionResult<Response> GetScanStatus() {
             return new Response {
                 Item = new ScanStatus() {
-                    scanning = Index.IsScanInProgress,
+                    scanning = Scanner.IsScanInProgress,
                     count = Index.GetFileCount(),
                     countSpecified = true,
                 },
@@ -35,8 +38,8 @@ namespace Sharpsonic.Api.Controllers {
         [Route("startScan")]
         [Route("startScan.view")]
         public ActionResult<Response> StartScan() {
-            // TODO: Should this be a "hosted service"?
-            Task.Run(() => Index.Scan())
+            // TODO: Should this use the hosted service?
+            Task.Run(() => Scanner.Scan())
                 .ConfigureAwait(false);
 
             return new Response {

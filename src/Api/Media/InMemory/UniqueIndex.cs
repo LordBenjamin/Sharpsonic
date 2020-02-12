@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sharpsonic.Api.Media {
+namespace Sharpsonic.Api.Media.InMemory {
     public class UniqueIndex<TKey, TValue> where TValue : class {
         private readonly Func<TValue, TKey> getKey;
         private readonly Dictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>();

@@ -4,19 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class UserManagementController : ControllerBase {
-        public UserManagementController(IOptions<ApplicationSettings> appSettings, MediaLibraryService index) {
+        public UserManagementController(IOptions<ApplicationSettings> appSettings, InMemoryMediaLibrary index) {
             Settings = appSettings.Value;
             Index = index;
         }
 
         public ApplicationSettings Settings { get; }
-        public MediaLibraryService Index { get; }
+        public InMemoryMediaLibrary Index { get; }
 
         [HttpGet]
         [Route("getUser")]

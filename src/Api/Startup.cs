@@ -11,6 +11,7 @@ using System.Text.Json;
 using Sharpsonic.Api.Formatters;
 using System.Linq;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api {
     public class Startup {
@@ -47,8 +48,9 @@ namespace Sharpsonic.Api {
 
             });
 
-            services.AddSingleton<MediaLibraryService>();
-            services.AddHostedService(p => p.GetService<MediaLibraryService>());
+            services.AddSingleton<InMemoryMediaLibrary>();
+            services.AddSingleton<MediaScanner>();
+            services.AddHostedService<MediaLibraryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

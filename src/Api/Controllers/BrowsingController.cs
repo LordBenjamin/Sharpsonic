@@ -6,17 +6,19 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class BrowsingController : ControllerBase {
-        public MediaLibraryService Index { get; }
 
-        public BrowsingController(MediaLibraryService index) {
+        public BrowsingController(InMemoryMediaLibrary index) {
             Index = index;
         }
+
+        public InMemoryMediaLibrary Index { get; }
 
         [HttpGet]
         [Route("getMusicFolders")]

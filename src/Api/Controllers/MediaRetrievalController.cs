@@ -6,17 +6,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class MediaRetrievalController : ControllerBase {
-        public MediaLibraryService Index { get; }
-
-        public MediaRetrievalController(MediaLibraryService index) {
+        public MediaRetrievalController(InMemoryMediaLibrary index) {
             Index = index;
         }
+
+        public InMemoryMediaLibrary Index { get; }
+
 
         [HttpGet]
         [Route("stream")]

@@ -1,10 +1,11 @@
-using Sharpsonic.Api.DataTransfer;
-using Microsoft.AspNetCore.Mvc;
-using Sharpsonic.Api.Media;
-using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Sharpsonic.Api.DataTransfer;
+using Sharpsonic.Api.Media;
+using Sharpsonic.Api.Media.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
@@ -12,11 +13,11 @@ namespace Sharpsonic.Api.Controllers {
     [FormatFilter]
     public class AlbumSongListController : ControllerBase {
 
-        public AlbumSongListController(MediaLibraryService index) {
+        public AlbumSongListController(InMemoryMediaLibrary index) {
             Index = index;
         }
 
-        public MediaLibraryService Index { get; }
+        public InMemoryMediaLibrary Index { get; }
 
         [HttpGet]
         [Route("getAlbumList")]
