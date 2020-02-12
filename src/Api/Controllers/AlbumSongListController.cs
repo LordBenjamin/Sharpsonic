@@ -42,9 +42,9 @@ namespace Sharpsonic.Api.Controllers {
             if (type == "random") {
                 Random random = new Random();
                 query = query.OrderBy(i => random.NextDouble());
-            } else if (type == "alphabeticalByName ") {
+            } else if (type == "alphabeticalByName") {
                 query = query.OrderBy(i => i.Name);
-            } else if (type == "alphabeticalByArtist ") {
+            } else if (type == "alphabeticalByArtist") {
                 query = query.OrderBy(i => i.Artist)
                     .ThenBy(i => i.Name);
             }
