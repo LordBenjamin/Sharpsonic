@@ -105,6 +105,8 @@ namespace Sharpsonic.Api.Media {
                     AddedUtc = DateTime.UtcNow,
                 };
 
+                Logger.LogInformation("Scan: Adding directory: {0}", info.FullName);
+
                 Library.AddEntry(entry);
             }
 
@@ -147,6 +149,8 @@ namespace Sharpsonic.Api.Media {
 
 
             if (entry == null) {
+                Logger.LogInformation ("Scan: Adding file: {0}", info.FullName);
+
                 added = true;
                 entry = new MediaLibraryEntry {
                     IsFolder = false,
