@@ -59,7 +59,7 @@ namespace Sharpsonic.Api.Controllers {
                             isDir = i.IsFolder,
                             track = i.TrackNumber ?? 0,
                             trackSpecified = i.TrackNumber.HasValue,
-                            coverArt =  (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
+                            coverArt = (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
                             duration = i.Duration.HasValue ? (int)System.Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
                             durationSpecified = i.Duration.HasValue,
                             path = System.IO.Path.GetRelativePath(rootDir.Path, i.Path),

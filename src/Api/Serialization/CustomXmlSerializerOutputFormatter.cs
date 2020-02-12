@@ -7,7 +7,7 @@ namespace Sharpsonic.Api.Serialization {
     public class CustomXmlSerializerOutputFormatter : XmlSerializerOutputFormatter {
         public CustomXmlSerializerOutputFormatter()
             : base(new XmlWriterSettings {
-                OmitXmlDeclaration =false,
+                OmitXmlDeclaration = false,
 #if DEBUG
                 Indent = true,
                 NewLineHandling = NewLineHandling.Entitize,

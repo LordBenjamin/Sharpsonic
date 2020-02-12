@@ -69,8 +69,7 @@ namespace Sharpsonic.Api.Media {
             foreach (FileSystemInfo info2 in fileSystemEntries) {
                 if (info2 is DirectoryInfo directoryInfo) {
                     Scan(folderId, ref i, directoryInfo);
-                }
-                else if (info2.Name.EndsWith(".mp3")) {
+                } else if (info2.Name.EndsWith(".mp3")) {
                     string artist = null;
                     string title = null;
                     int? trackNumber = null;

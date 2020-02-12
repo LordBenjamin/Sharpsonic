@@ -41,7 +41,7 @@ namespace Sharpsonic.Api.Controllers {
                     downloadRole = false,
                     coverArtRole = true,
                     jukeboxRole = false,
-                    playlistRole =false,
+                    playlistRole = false,
                     podcastRole = false,
                     scrobblingEnabled = false,
                     settingsRole = false,

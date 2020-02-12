@@ -34,8 +34,7 @@ namespace Sharpsonic.Api.Middleware {
 
             if (!string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(salt)) {
                 passwordAccepted = AreEquivalent(context, Hash(options.Password, salt), token);
-            }
-            else {
+            } else {
                 passwordAccepted = string.Equals(
                     options.Password, DecodePlaintextPassword(password), StringComparison.Ordinal);
             }

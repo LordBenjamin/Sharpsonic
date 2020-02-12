@@ -166,14 +166,14 @@ csharp_style_var_elsewhere = false:warning
 csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = false:none
 # New Line Options
-csharp_new_line_before_catch = false:warning
-csharp_new_line_before_else = false:warning
-csharp_new_line_before_finally = false:warning
-csharp_new_line_before_members_in_anonymous_types = true:warning
-csharp_new_line_before_members_in_object_initializers = true:warning
+csharp_new_line_before_catch = false
+csharp_new_line_before_else = false
+csharp_new_line_before_finally = false
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = true
 # BUG: Warning level cannot be set https://github.com/dotnet/roslyn/issues/18010
 csharp_new_line_before_open_brace = none
-csharp_new_line_between_query_expression_clauses = true:warning
+csharp_new_line_between_query_expression_clauses = true
 # Spacing Options
 csharp_space_after_cast = false:warning
 csharp_space_after_colon_in_inheritance_clause = true:warning

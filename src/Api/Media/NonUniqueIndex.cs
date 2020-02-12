@@ -14,7 +14,7 @@ namespace Sharpsonic.Api.Media {
             TKey key = getKey(value);
             List<TValue> list = dictionary.GetValueOrDefault(key);
 
-            if(list == null) {
+            if (list == null) {
                 list = new List<TValue>();
                 dictionary.Add(key, list);
             }
@@ -25,8 +25,7 @@ namespace Sharpsonic.Api.Media {
         public List<TValue> Get(TKey key) {
             if (dictionary.TryGetValue(key, out List<TValue> list)) {
                 return list;
-            }
-            else {
+            } else {
                 return null;
             }
         }

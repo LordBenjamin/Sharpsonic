@@ -55,8 +55,7 @@ namespace Sharpsonic.Api {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-            }
-            else {
+            } else {
                 app.UseHttpsRedirection();
             }
 
