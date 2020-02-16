@@ -1,3 +1,3 @@
-# Sharpsonic
+# Auricular
 
-Sharpsonic is a Booksonic-compatible audio server written in C# / ASP.NET Core.
+Auricular is a Booksonic-compatible audio server written in C# / ASP.NET Core.
