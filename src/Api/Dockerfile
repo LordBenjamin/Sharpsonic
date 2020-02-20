@@ -8,12 +8,12 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY . ./
-RUN dotnet restore "Sharpsonic.sln"
-COPY . .
-RUN dotnet build "Sharpsonic.sln" -c Release -o /app/build
+WORKDIR /src/Api
+RUN dotnet restore "Api.csproj"
+RUN dotnet build "Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Sharpsonic.sln" -c Release -o /app/publish
+RUN dotnet publish "Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
