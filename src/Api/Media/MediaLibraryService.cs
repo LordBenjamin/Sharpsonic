@@ -3,21 +3,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Sharpsonic.Api.Media.InMemory;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.DataAccess;
 
 namespace Sharpsonic.Api.Media {
 
     public class MediaLibraryService : IHostedService {
 
-        public MediaLibraryService(IOptions<MediaLibrarySettings> settings, InMemoryMediaLibrary library, MediaScanner scanner) {
+        public MediaLibraryService(IOptions<MediaLibrarySettings> settings, IMediaLibrary library, MediaScanner scanner) {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             Library = library ?? throw new ArgumentNullException(nameof(library));
             Scanner = scanner ?? throw new ArgumentNullException(nameof(library));
         }
 
         public IOptions<MediaLibrarySettings> Settings { get; }
-        public InMemoryMediaLibrary Library { get; }
+        public IMediaLibrary Library { get; }
         public MediaScanner Scanner { get; }
 
         public async Task StartAsync(CancellationToken cancellationToken) {

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Sharpsonic.Api.Media {
+namespace Sharpsonic.DataAccess.Entities {
     public class MediaLibraryEntry {
         public int Id { get; set; }
         public string Artist { get; set; }
@@ -15,7 +15,7 @@ namespace Sharpsonic.Api.Media {
         public DateTime AddedUtc { get; set; }
         public DateTime? LastPlayedUtc { get; set; }
 
-        internal Stream OpenReadStream() {
+        public Stream OpenReadStream() {
             if (IsFolder) {
                 throw new InvalidOperationException("Can't open a folder for reading.");
             }

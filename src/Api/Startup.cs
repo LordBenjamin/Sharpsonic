@@ -1,17 +1,19 @@
-using Sharpsonic.Api.Media;
-using Sharpsonic.Api.Middleware;
-using Sharpsonic.Api.Serialization;
+using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Text.Json;
 using Sharpsonic.Api.Formatters;
-using System.Linq;
+using Sharpsonic.Api.Media;
+using Sharpsonic.Api.Middleware;
+using Sharpsonic.Api.Serialization;
 using Sharpsonic.Api.Settings;
-using Sharpsonic.Api.Media.InMemory;
+using Sharpsonic.DataAccess;
+using Sharpsonic.DataAccess.Sqlite;
 
 namespace Sharpsonic.Api {
     public class Startup {
@@ -48,7 +50,11 @@ namespace Sharpsonic.Api {
 
             });
 
-            services.AddSingleton<InMemoryMediaLibrary>();
+            using(var context = new SqliteDbContext()) {
+                context.Database.Migrate();
+            }
+
+            services.AddSingleton<IMediaLibrary, SqliteMediaLibrary>();
             services.AddSingleton<MediaScanner>();
             services.AddHostedService<MediaLibraryService>();
         }

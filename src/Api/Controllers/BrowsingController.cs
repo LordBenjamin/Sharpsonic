@@ -1,12 +1,10 @@
-using Sharpsonic.Api.DataTransfer;
-using Sharpsonic.Api.Media;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Sharpsonic.Api.Settings;
-using Sharpsonic.Api.Media.InMemory;
+using Microsoft.AspNetCore.Mvc;
+using Sharpsonic.Api.DataTransfer;
+using Sharpsonic.DataAccess;
+using Sharpsonic.DataAccess.Entities;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
@@ -14,11 +12,11 @@ namespace Sharpsonic.Api.Controllers {
     [FormatFilter]
     public class BrowsingController : ControllerBase {
 
-        public BrowsingController(InMemoryMediaLibrary index) {
+        public BrowsingController(IMediaLibrary index) {
             Index = index;
         }
 
-        public InMemoryMediaLibrary Index { get; }
+        public IMediaLibrary Index { get; }
 
         [HttpGet]
         [Route("getMusicFolders")]

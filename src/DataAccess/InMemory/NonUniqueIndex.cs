@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sharpsonic.Api.Media.InMemory {
+namespace Sharpsonic.DataAccess.InMemory {
     public class NonUniqueIndex<TKey, TValue> where TValue : class {
         private readonly Func<TValue, TKey> getKey;
         private readonly Dictionary<TKey, List<TValue>> dictionary = new Dictionary<TKey, List<TValue>>();
@@ -12,9 +12,9 @@ namespace Sharpsonic.Api.Media.InMemory {
 
         public void Add(TValue value) {
             TKey key = getKey(value);
-            List<TValue> list = dictionary.GetValueOrDefault(key);
+                ;
 
-            if (list == null) {
+            if (!dictionary.TryGetValue(key, out List<TValue> list)) {
                 list = new List<TValue>();
                 dictionary.Add(key, list);
             }

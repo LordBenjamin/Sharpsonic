@@ -1,23 +1,22 @@
-using Sharpsonic.Api.Media;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Sharpsonic.Api.Settings;
-using Sharpsonic.Api.Media.InMemory;
+using Microsoft.AspNetCore.Mvc;
+using Sharpsonic.DataAccess;
+using Sharpsonic.DataAccess.Entities;
+using Sharpsonic.DataAccess.InMemory;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class MediaRetrievalController : ControllerBase {
-        public MediaRetrievalController(InMemoryMediaLibrary index) {
+        public MediaRetrievalController(IMediaLibrary index) {
             Index = index;
         }
 
-        public InMemoryMediaLibrary Index { get; }
+        public IMediaLibrary Index { get; }
 
 
         [HttpGet]

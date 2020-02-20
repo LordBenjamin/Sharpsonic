@@ -1,23 +1,21 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Sharpsonic.Api.DataTransfer;
 using Sharpsonic.Api.Media;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Sharpsonic.Api.Media.InMemory;
+using Sharpsonic.DataAccess;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class MediaScanningController {
-        public MediaScanningController(InMemoryMediaLibrary index, MediaScanner scanner) {
+        public MediaScanningController(IMediaLibrary index, MediaScanner scanner) {
             Index = index ?? throw new ArgumentNullException(nameof(index));
             Scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
         }
 
-        public InMemoryMediaLibrary Index { get; }
+        public IMediaLibrary Index { get; }
         public MediaScanner Scanner { get; }
 
         [HttpGet]

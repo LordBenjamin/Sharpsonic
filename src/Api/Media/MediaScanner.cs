@@ -5,14 +5,15 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Sharpsonic.Api.Media.InMemory;
 using Sharpsonic.Api.Settings;
+using Sharpsonic.DataAccess;
+using Sharpsonic.DataAccess.Entities;
 
 namespace Sharpsonic.Api.Media {
     public class MediaScanner {
         private readonly object scanLockObject = new object();
 
-        public MediaScanner(IOptions<MediaLibrarySettings> settings, InMemoryMediaLibrary library, ILogger<MediaScanner> logger) {
+        public MediaScanner(IOptions<MediaLibrarySettings> settings, IMediaLibrary library, ILogger<MediaScanner> logger) {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             Library = library ?? throw new ArgumentNullException(nameof(library));
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -20,7 +21,7 @@ namespace Sharpsonic.Api.Media {
 
         public bool IsScanInProgress { get; private set; }
         public IOptions<MediaLibrarySettings> Settings { get; }
-        public InMemoryMediaLibrary Library { get; }
+        public IMediaLibrary Library { get; }
         public ILogger<MediaScanner> Logger { get; }
 
         public void Scan() {
@@ -90,6 +91,7 @@ namespace Sharpsonic.Api.Media {
 
             if (albumNames.Count == 1) {
                 directoryEntry.Name = albumNames.Single();
+                Library.UpdateEntry(directoryEntry);
             }
         }
 

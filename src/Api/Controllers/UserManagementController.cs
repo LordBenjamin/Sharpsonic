@@ -1,23 +1,22 @@
-using Sharpsonic.Api.DataTransfer;
-using Sharpsonic.Api.Media;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Linq;
+using Sharpsonic.Api.DataTransfer;
 using Sharpsonic.Api.Settings;
-using Sharpsonic.Api.Media.InMemory;
+using Sharpsonic.DataAccess;
 
 namespace Sharpsonic.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
     public class UserManagementController : ControllerBase {
-        public UserManagementController(IOptions<ApplicationSettings> appSettings, InMemoryMediaLibrary index) {
+        public UserManagementController(IOptions<ApplicationSettings> appSettings, IMediaLibrary index) {
             Settings = appSettings.Value;
             Index = index;
         }
 
         public ApplicationSettings Settings { get; }
-        public InMemoryMediaLibrary Index { get; }
+        public IMediaLibrary Index { get; }
 
         [HttpGet]
         [Route("getUser")]
