@@ -148,7 +148,7 @@ namespace Sharpsonic.DataAccess.Sqlite {
                 // If this is a file, also update the parent folder
                 if (!entry.IsFolder) {
                     entry = context.LibraryEntries
-                        .Where(e => e.Id == id)
+                        .Where(e => e.Id == entry.ParentId)
                         .SingleOrDefault();
 
                     entry.LastPlayedUtc = now;
