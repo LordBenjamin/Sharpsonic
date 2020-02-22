@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sharpsonic.DataAccess.Sqlite;
+using Auricular.DataAccess.Sqlite;
 
-namespace Sharpsonic.DataAccess.Sqlite.Migrations
+namespace Auricular.DataAccess.Sqlite.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
     [Migration("20200220220024_InitialCreate")]
@@ -18,7 +18,7 @@ namespace Sharpsonic.DataAccess.Sqlite.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2");
 
-            modelBuilder.Entity("Sharpsonic.DataAccess.Entities.MediaLibraryEntry", b =>
+            modelBuilder.Entity("Auricular.DataAccess.Entities.MediaLibraryEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

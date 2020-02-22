@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Sharpsonic.Api.Settings;
-using Sharpsonic.DataAccess;
-using Sharpsonic.DataAccess.Entities;
+using Auricular.Api.Settings;
+using Auricular.DataAccess;
+using Auricular.DataAccess.Entities;
 
-namespace Sharpsonic.Api.Media {
+namespace Auricular.Api.Media {
     public class MediaScanner {
         private readonly object scanLockObject = new object();
 

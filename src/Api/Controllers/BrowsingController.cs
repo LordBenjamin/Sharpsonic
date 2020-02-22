@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Sharpsonic.Api.DataTransfer;
-using Sharpsonic.DataAccess;
-using Sharpsonic.DataAccess.Entities;
+using Auricular.Api.DataTransfer;
+using Auricular.DataAccess;
+using Auricular.DataAccess.Entities;
 
-namespace Sharpsonic.Api.Controllers {
+namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]

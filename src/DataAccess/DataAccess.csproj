@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Sharpsonic.DataAccess</AssemblyName>
-    <RootNamespace>Sharpsonic.DataAccess</RootNamespace>
+    <AssemblyName>Auricular.DataAccess</AssemblyName>
+    <RootNamespace>Auricular.DataAccess</RootNamespace>
   </PropertyGroup>
 
 </Project>

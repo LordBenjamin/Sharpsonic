@@ -1,7 +1,7 @@
-﻿using Sharpsonic.DataAccess.Entities;
+﻿using Auricular.DataAccess.Entities;
 using System.Collections.Generic;
 
-namespace Sharpsonic.DataAccess
+namespace Auricular.DataAccess
 {
     public interface IMediaLibrary
     {

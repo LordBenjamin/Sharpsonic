@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Sharpsonic.DataAccess.Entities {
+namespace Auricular.DataAccess.Entities {
     public class MediaLibraryEntry {
         public int Id { get; set; }
         public string Artist { get; set; }

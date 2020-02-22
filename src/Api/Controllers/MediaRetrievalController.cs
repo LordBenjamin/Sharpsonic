@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Sharpsonic.DataAccess;
-using Sharpsonic.DataAccess.Entities;
-using Sharpsonic.DataAccess.InMemory;
+using Auricular.DataAccess;
+using Auricular.DataAccess.Entities;
+using Auricular.DataAccess.InMemory;
 
-namespace Sharpsonic.Api.Controllers {
+namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]

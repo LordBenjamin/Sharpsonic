@@ -1,7 +1,7 @@
-using Sharpsonic.Api.DataTransfer;
+using Auricular.Api.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Sharpsonic.Api.Controllers {
+namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]

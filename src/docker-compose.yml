@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   api:
-    image: ${DOCKER_REGISTRY-}sharpsonic
+    image: ${DOCKER_REGISTRY-}auricular
     volumes:
     - /host_mnt/d/Users/Ben/Documents/Audiobooks:/books
     ports:

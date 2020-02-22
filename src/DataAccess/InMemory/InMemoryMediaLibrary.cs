@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Sharpsonic.DataAccess.Entities;
+using Auricular.DataAccess.Entities;
 
-namespace Sharpsonic.DataAccess.InMemory {
+namespace Auricular.DataAccess.InMemory {
 
     public class InMemoryMediaLibrary : IMediaLibrary
     {

@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Sharpsonic.Api.Settings;
+using Auricular.Api.Settings;
 using System;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sharpsonic.Api.Middleware {
+namespace Auricular.Api.Middleware {
     public class SubsonicAuthenticationMiddleware {
         private readonly RequestDelegate _next;
         private readonly ApplicationSettings options;

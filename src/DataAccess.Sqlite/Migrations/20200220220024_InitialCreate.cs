@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Sharpsonic.DataAccess.Sqlite.Migrations
+namespace Auricular.DataAccess.Sqlite.Migrations
 {
     public partial class InitialCreate : Migration
     {

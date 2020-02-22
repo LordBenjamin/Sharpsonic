@@ -1,4 +1,4 @@
-namespace Sharpsonic.Api.Settings {
+namespace Auricular.Api.Settings {
     public class MediaLibrarySettings {
         public string SourceDirectory { get; set; }
     }

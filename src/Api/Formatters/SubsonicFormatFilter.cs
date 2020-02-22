@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 
-namespace Sharpsonic.Api.Formatters {
+namespace Auricular.Api.Formatters {
     public class SubsonicFormatFilter : FormatFilter {
         public SubsonicFormatFilter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
             : base(options, loggerFactory) {

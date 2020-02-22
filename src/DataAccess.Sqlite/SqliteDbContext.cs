@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Sharpsonic.DataAccess.Entities;
+using Auricular.DataAccess.Entities;
 
-namespace Sharpsonic.DataAccess.Sqlite
+namespace Auricular.DataAccess.Sqlite
 {
     public class SqliteDbContext : DbContext
     {

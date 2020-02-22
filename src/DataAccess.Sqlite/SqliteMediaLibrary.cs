@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpsonic.DataAccess.Entities;
+using Auricular.DataAccess.Entities;
 
-namespace Sharpsonic.DataAccess.Sqlite {
+namespace Auricular.DataAccess.Sqlite {
     public class SqliteMediaLibrary : IMediaLibrary {
         public int AddEntry(MediaLibraryEntry entry) {
             using (var context = new SqliteDbContext()) {

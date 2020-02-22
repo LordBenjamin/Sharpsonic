@@ -7,15 +7,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sharpsonic.Api.Formatters;
-using Sharpsonic.Api.Media;
-using Sharpsonic.Api.Middleware;
-using Sharpsonic.Api.Serialization;
-using Sharpsonic.Api.Settings;
-using Sharpsonic.DataAccess;
-using Sharpsonic.DataAccess.Sqlite;
+using Auricular.Api.Formatters;
+using Auricular.Api.Media;
+using Auricular.Api.Middleware;
+using Auricular.Api.Serialization;
+using Auricular.Api.Settings;
+using Auricular.DataAccess;
+using Auricular.DataAccess.Sqlite;
 
-namespace Sharpsonic.Api {
+namespace Auricular.Api {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;

@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Sharpsonic.Api.Settings;
-using Sharpsonic.DataAccess;
+using Auricular.Api.Settings;
+using Auricular.DataAccess;
 
-namespace Sharpsonic.Api.Media {
+namespace Auricular.Api.Media {
 
     public class MediaLibraryService : IHostedService {
 

@@ -1,6 +1,6 @@
-using Sharpsonic.Api.Middleware;
+using Auricular.Api.Middleware;
 
-namespace Sharpsonic.Api.DataTransfer {
+namespace Auricular.Api.DataTransfer {
     public partial class Response {
         public Response() {
             version = SubsonicApiVersioningMiddleware.ServerVersion.ToString(3);

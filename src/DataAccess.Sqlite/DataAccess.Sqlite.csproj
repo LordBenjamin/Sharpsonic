@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Sharpsonic.DataAccess.Sqlite</AssemblyName>
-    <RootNamespace>Sharpsonic.DataAccess.Sqlite</RootNamespace>
+    <AssemblyName>Auricular.DataAccess.Sqlite</AssemblyName>
+    <RootNamespace>Auricular.DataAccess.Sqlite</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

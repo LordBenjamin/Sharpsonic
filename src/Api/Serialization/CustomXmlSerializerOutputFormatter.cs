@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Sharpsonic.Api.Serialization {
+namespace Auricular.Api.Serialization {
     public class CustomXmlSerializerOutputFormatter : XmlSerializerOutputFormatter {
         public CustomXmlSerializerOutputFormatter()
             : base(new XmlWriterSettings {

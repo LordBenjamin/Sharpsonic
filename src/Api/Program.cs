@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 
-namespace Sharpsonic.Api {
+namespace Auricular.Api {
     public class Program {
 
         public static void Main(string[] args) {
