@@ -89,7 +89,8 @@ namespace Auricular.Api.Controllers {
         }
 
         private Index[] SearchIndexes(int? musicFolderId, long ifModifiedSince) {
-            IEnumerable<MediaLibraryEntry> entries = Index.GetChildFolders(0);
+            IEnumerable<MediaLibraryEntry> entries = Index.GetRootFolders()
+                .SelectMany(f => Index.GetChildFolders(f.Id));
 
             if (musicFolderId.HasValue) {
                 entries = entries.Where(i => i.ParentId == musicFolderId.Value);
