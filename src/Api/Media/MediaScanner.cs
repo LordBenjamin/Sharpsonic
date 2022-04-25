@@ -80,7 +80,9 @@ namespace Auricular.Api.Media {
 
             foreach (FileSystemInfo info2 in fileSystemEntries) {
                 if (info2 is DirectoryInfo directoryInfo) {
-                    Scan(directoryEntry.Id, ref numFilesAdded, directoryInfo);
+                    if (info2.Name != "__MACOSX") {
+                        Scan(directoryEntry.Id, ref numFilesAdded, directoryInfo);
+                    }
                 } else if (info2.Name.EndsWith(".mp3")) {
                     bool added = AddOrUpdateFileEntry(directoryEntry.Id, (FileInfo)info2, albumNames);
                     if (added) {
