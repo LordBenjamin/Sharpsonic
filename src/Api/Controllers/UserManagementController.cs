@@ -1,7 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Auricular.Api.DataTransfer;
+using Auricular.DataTransfer;
 using Auricular.Api.Settings;
 using Auricular.DataAccess;
 

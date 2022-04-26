@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{E1A2E90C-B57E-4C10-ABBF-0EC01BC0C5B2}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Sqlite", "DataAccess.Sqlite\DataAccess.Sqlite.csproj", "{378BA81F-4281-4C1B-BEAC-458F9021B54E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{21FD89F3-4708-4B7F-A1AA-A0D05761341F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransfer", "DataTransfer\DataTransfer.csproj", "{D4BC6AA2-91D7-48B0-9BDA-841791BDB1E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{21FD89F3-4708-4B7F-A1AA-A0D05761341F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21FD89F3-4708-4B7F-A1AA-A0D05761341F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21FD89F3-4708-4B7F-A1AA-A0D05761341F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4BC6AA2-91D7-48B0-9BDA-841791BDB1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4BC6AA2-91D7-48B0-9BDA-841791BDB1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4BC6AA2-91D7-48B0-9BDA-841791BDB1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4BC6AA2-91D7-48B0-9BDA-841791BDB1E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-using Auricular.Api.DataTransfer;
+using Auricular.DataTransfer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auricular.Api.Controllers {

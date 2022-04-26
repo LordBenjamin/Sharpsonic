@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Auricular.Api.DataTransfer;
+using Auricular.DataTransfer;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
 

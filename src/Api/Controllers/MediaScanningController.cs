@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Auricular.Api.DataTransfer;
+using Auricular.DataTransfer;
 using Auricular.Api.Media;
 using Auricular.DataAccess;
 

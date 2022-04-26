@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Auricular.DataTransfer;
 
 namespace Auricular.Api.Middleware {
     public class SubsonicAuthenticationMiddleware {
@@ -67,7 +68,7 @@ namespace Auricular.Api.Middleware {
         }
 
         private async Task WriteAuthFailure(HttpContext context) {
-            Version version = SubsonicApiVersioningMiddleware.ServerVersion;
+            Version version = SubsonicCompatibility.ServerVersion;
 
             context.Response.StatusCode = StatusCodes.Status200OK;
             context.Response.ContentType = "text/xml";
