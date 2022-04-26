@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>false</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <AssemblyName>Auricular.Client</AssemblyName>
+    <RootNamespace>Auricular.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
