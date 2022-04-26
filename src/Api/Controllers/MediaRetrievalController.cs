@@ -25,6 +25,11 @@ namespace Auricular.Api.Controllers {
         public FileStreamResult StreamFile(int id) {
             MediaLibraryEntry entry = Index.GetFile(id);
 
+            // Temporary!
+            if (entry == null) {
+                entry = Index.GetChildEntries(id).FirstOrDefault();
+            }
+
             Index.UpdateLastPlayed(id);
 
             return new FileStreamResult(entry.OpenReadStream(), "audio/mp3");

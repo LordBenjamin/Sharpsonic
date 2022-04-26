@@ -10,7 +10,7 @@
 
 @if(Albums is Album[] albums) {
     foreach(var item in albums) {
-        <p><a @onclick="() => ItemClicked(item)" style="cursor:pointer">@item.Title</a></p>
+        <p><a @onclick="async () => await ItemClicked(item)" style="cursor:pointer">@item.Title</a></p>
     }
 } else {
     @:Loading...
@@ -30,7 +30,7 @@
         return (await HttpClient.GetFromJsonAsync<AlbumListResponse>("https://localhost:5001/rest/getAlbumList"))?.Albums;
     }
 
-    private void ItemClicked (Album item) {
-        Player.Play($"{item.Title} - {item.Artist}");
+    private async Task ItemClicked (Album item) {
+        await Player.Play($"https://localhost:5001/rest/stream?id={item.Id}", $"{item.Title} - {item.Artist}");
     }
 }
