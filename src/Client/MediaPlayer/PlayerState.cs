@@ -15,15 +15,10 @@ namespace Auricular.Client.MediaPlayer {
 
         public string NowPlaying { get; private set; } = "Player";
 
-        public async Task Play(string url, string nowPlaying) {
+        public async ValueTask Play(string url, string nowPlaying) {
             NowPlaying = nowPlaying;
 
-            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
-
-            if (currentSoundId is int soundId) {
-                await howl.Stop(soundId);
-                currentSoundId = null;
-            }
+            await Stop();
 
             currentSoundId = await howl.Play(new HowlOptions {
                 Sources = new[] { url },
@@ -31,6 +26,19 @@ namespace Auricular.Client.MediaPlayer {
                 Html5 = true,
                 Loop = false,
             });
+
+            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public async ValueTask Stop() {
+            if (currentSoundId is int soundId) {
+                await howl.Stop(soundId);
+                currentSoundId = null;
+            }
+
+            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public bool IsPlaying => currentSoundId.HasValue;
     }
 }
