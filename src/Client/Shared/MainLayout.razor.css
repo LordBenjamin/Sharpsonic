@@ -57,12 +57,15 @@ footer {
 
     .page {
         height: calc(100vh - 100px);
+        overflow-y: scroll;
     }
 }
 
 @media (min-width: 641px) {
     .page {
+        height: calc(100vh - 100px);
         flex-direction: row;
+        overflow-y: scroll;
     }
 
     .sidebar {
