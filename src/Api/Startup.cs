@@ -1,20 +1,14 @@
-using System.Linq;
-using System.Text.Json;
+using System.IO;
+using Auricular.Api.Media;
+using Auricular.Api.Settings;
+using Auricular.DataAccess;
+using Auricular.DataAccess.Sqlite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Auricular.Api.Formatters;
-using Auricular.Api.Media;
-using Auricular.Api.Middleware;
-using Auricular.Api.Serialization;
-using Auricular.Api.Settings;
-using Auricular.DataAccess;
-using Auricular.DataAccess.Sqlite;
-using System.IO;
 
 namespace Auricular.Api {
     public class Startup {
@@ -35,24 +29,8 @@ namespace Auricular.Api {
             section = Configuration.GetSection(nameof(SqliteSettings));
             services.Configure<SqliteSettings>(section);
 
-            // Replace FormatFilter with one that is Subsonic URI compatible
-            ServiceDescriptor descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(FormatFilter));
-            services.Remove(descriptor);
-            services.Add(ServiceDescriptor.Singleton<FormatFilter, SubsonicFormatFilter>());
-
             services.AddControllers();
-            services.AddMvcCore(options => {
-                // Prefer XML by default
-                options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
-                options.OutputFormatters.Add(new CustomXmlSerializerOutputFormatter());
-                options.OutputFormatters.Add(new SystemTextJsonOutputFormatter(new JsonSerializerOptions()));
-            })
-            .AddFormatterMappings(mappings => {
-                // text/xml as specified in Subsonic API docs
-                mappings.SetMediaTypeMappingForFormat("xml", "text/xml");
-                mappings.SetMediaTypeMappingForFormat("json", "application/json");
-
-            });
+            services.AddMvcCore();
 
             SqliteSettings sqliteSettings = section.Get<SqliteSettings>() ?? new SqliteSettings();
             string databaseFileDirectory = Path.GetDirectoryName(sqliteSettings.DatabaseFilename);
@@ -80,10 +58,6 @@ namespace Auricular.Api {
             }
 
             app.UseRouting();
-
-            app.RequireCompatibleSubsonicApiClient();
-
-            app.UseSubsonicAuthentication();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
