@@ -8,6 +8,11 @@ main {
     flex: 1;
 }
 
+footer {
+    background: #f7f7f7;
+    height:100px;
+}
+
 .sidebar {
   background: #262626;
 }
@@ -48,6 +53,10 @@ main {
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
     }
+
+    .page {
+        height: calc(100vh - 100px);
+    }
 }
 
 @media (min-width: 641px) {
@@ -57,7 +66,7 @@ main {
 
     .sidebar {
         width: 250px;
-        height: 100vh;
+        height: calc(100vh - 100px);
         position: sticky;
         top: 0;
     }
