@@ -29,6 +29,7 @@ namespace Auricular.Api.Controllers {
             if (entry == null) {
                 entry = Index.GetChildEntries(id)
                     .Where(e => !e.IsFolder)
+                    .OrderBy(e => e.TrackNumber)
                     .FirstOrDefault();
             }
 
