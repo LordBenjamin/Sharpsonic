@@ -22,7 +22,7 @@ namespace Auricular.Api.Controllers {
         [HttpGet]
         [Route("getAlbumList")]
         [Route("getAlbumList.view")]
-        public ActionResult<Response> GetAlbumList(
+        public ActionResult<AlbumListResponse> GetAlbumList(
             string type,
             int size = 10,
             int offset = 0,
@@ -60,20 +60,17 @@ namespace Auricular.Api.Controllers {
                 .Skip(offset)
                 .Take(size);
 
-            return new Response {
-                ItemElementName = ItemChoiceType.albumList,
-                Item = new AlbumList {
-                    album = query
-                        .Select(i => new Child {
-                            id = i.Id.ToString(CultureInfo.InvariantCulture),
-                            parent = i.ParentId.ToString(CultureInfo.InvariantCulture),
-                            title = i.Name,
-                            artist = i.Artist,
-                            isDir = true,
-                            coverArt = i.Id.ToString(CultureInfo.InvariantCulture),
-                        })
-                        .ToArray(),
-                }
+            return new AlbumListResponse {
+                Albums = query
+                .Select(i => new Album {
+                    Id = i.Id.ToString(CultureInfo.InvariantCulture),
+                    ParentId = i.ParentId.ToString(CultureInfo.InvariantCulture),
+                    Title = i.Name,
+                    Artist = i.Artist,
+                    IsDir = true,
+                    CoverArt = i.Id.ToString(CultureInfo.InvariantCulture),
+                })
+                .ToArray(),
             };
         }
     }
