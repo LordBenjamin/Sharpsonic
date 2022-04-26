@@ -29,6 +29,8 @@ namespace Auricular.Api {
             section = Configuration.GetSection(nameof(SqliteSettings));
             services.Configure<SqliteSettings>(section);
 
+            services.AddCors();
+
             services.AddControllers();
             services.AddMvcCore();
 
@@ -56,6 +58,8 @@ namespace Auricular.Api {
             } else {
                 app.UseHttpsRedirection();
             }
+
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());
 
             app.UseRouting();
 
