@@ -1,14 +1,17 @@
+using System;
+using System.Net.Http;
+using Auricular.Client;
+using Auricular.Client.MediaPlayer;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
-using System;
-using Auricular.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+builder.Services.AddSingleton<PlayerState>();
 
 await builder.Build().RunAsync();

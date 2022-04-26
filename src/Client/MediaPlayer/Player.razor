@@ -1,0 +1,19 @@
+@inject PlayerState PlayerState;
+@implements IDisposable
+
+<h3 style="width:100%; text-align:center; padding-top:30px">@PlayerState?.NowPlaying</h3>
+
+@code {
+    protected override Task OnInitializedAsync() {
+        PlayerState.PlayerStateChanged += Player_StateChanged;
+        return base.OnInitializedAsync();
+    }
+
+    private void Player_StateChanged (object sender, EventArgs e) {
+        StateHasChanged();
+    }
+
+    public void Dispose() {
+        PlayerState.PlayerStateChanged -= Player_StateChanged;
+    }
+}

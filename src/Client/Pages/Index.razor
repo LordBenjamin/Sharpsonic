@@ -1,6 +1,8 @@
 @page "/"
+@using Auricular.Client.MediaPlayer
 @using Auricular.DataTransfer
 @inject HttpClient HttpClient
+@inject PlayerState Player
 
 <PageTitle>Index</PageTitle>
 
@@ -8,7 +10,7 @@
 
 @if(Albums is Album[] albums) {
     foreach(var item in albums) {
-        <p>@item.Title</p>
+        <p><a @onclick="() => ItemClicked(item)" style="cursor:pointer">@item.Title</a></p>
     }
 } else {
     @:Loading...
@@ -26,5 +28,9 @@
 
     private async Task<Album[]?> GetAlbums() {
         return (await HttpClient.GetFromJsonAsync<AlbumListResponse>("https://localhost:5001/rest/getAlbumList"))?.Albums;
+    }
+
+    private void ItemClicked (Album item) {
+        Player.Play($"{item.Title} - {item.Artist}");
     }
 }
