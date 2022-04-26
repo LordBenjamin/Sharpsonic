@@ -149,30 +149,38 @@ namespace Auricular.Api.Media {
             }
 
             bool added;
-            MediaLibraryEntry entry = Library.GetEntryByPath(info.FullName);
+            MediaLibraryEntry existingEntry = Library.GetEntryByPath(info.FullName);
+            MediaLibraryEntry newEntry;
 
-
-            if (entry == null) {
+            if (existingEntry == null) {
                 Logger.LogInformation ("Scan: Adding file: {0}", info.FullName);
 
                 added = true;
-                entry = new MediaLibraryEntry {
+                newEntry = new MediaLibraryEntry {
                     IsFolder = false,
                     ParentId = parentId,
                     Path = info.FullName,
                     AddedUtc = DateTime.UtcNow,
                 };
             } else {
-                Library.RemoveEntry(entry);
+                newEntry = existingEntry.Copy();
                 added = false;
             }
 
-            entry.Name = title;
-            entry.TrackNumber = trackNumber;
-            entry.Artist = artist;
-            entry.Duration = duration;
+            newEntry.Name = title;
+            newEntry.TrackNumber = trackNumber;
+            newEntry.Artist = artist;
+            newEntry.Duration = duration;
 
-            Library.AddEntry(entry);
+            if(existingEntry != null) {
+                if (existingEntry.Equals(newEntry)) {
+                    return false;
+                }
+
+                Library.RemoveEntry(existingEntry);
+            }
+
+            Library.AddEntry(newEntry);
 
             return added;
         }
