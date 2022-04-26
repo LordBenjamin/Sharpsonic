@@ -3,7 +3,8 @@
 
 <div style="width:100%; text-align:center; padding-top:10px">
     <h3>@PlayerState?.NowPlaying</h3>
-    <button @onclick=@(async() => await Stop()) disabled=@(!PlayerState.IsPlaying)>Stop</button>
+    <button @onclick=@(async() => await Play()) hidden=@(PlayerState.IsPlaying || PlayerState.Url is null)>Play</button>
+    <button @onclick=@(async() => await Stop()) hidden=@(!PlayerState.IsPlaying || PlayerState.Url is null)>Stop</button>
 </div>
 
 @code {
@@ -11,6 +12,10 @@
     {
         PlayerState.PlayerStateChanged += Player_StateChanged;
         return base.OnInitializedAsync();
+    }
+
+    public async Task Play() {
+        await PlayerState.Play(PlayerState.Url, PlayerState.NowPlaying);
     }
 
     public async Task Stop() {

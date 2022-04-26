@@ -7,15 +7,18 @@ namespace Auricular.Client.MediaPlayer {
         private readonly IHowl howl;
         private int? currentSoundId;
 
-        public event EventHandler<EventArgs> PlayerStateChanged;
+        public event EventHandler<EventArgs>? PlayerStateChanged;
 
         public PlayerState(IHowl howl) {
             this.howl = howl;
         }
 
+        public string? Url { get; private set; }
         public string NowPlaying { get; private set; } = "Player";
 
         public async ValueTask Play(string url, string nowPlaying) {
+            Url = url;
+
             NowPlaying = nowPlaying;
 
             await Stop();
