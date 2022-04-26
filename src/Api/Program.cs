@@ -7,25 +7,24 @@ namespace Auricular.Api {
     public class Program {
 
         public static void Main(string[] args) {
-            Directory.CreateDirectory("/config");
+            var builder = new ConfigurationBuilder();
+            builder.AddCommandLine(args);
+            IConfigurationRoot config = builder.Build();
 
-            // TODO: Hardcoded paths - can we pick this up from the environment?
-            // E.g. what happens on a Windows container?
-            if (!File.Exists("/config/appsettings.json") && Directory.Exists("/config")) {
-                File.Copy("appsettings.json", "/config/appsettings.json");
+            string config_dir = config["config_dir"];
+            Directory.CreateDirectory(config_dir);
+            if (!File.Exists(config_dir + "/appsettings.json") && Directory.Exists(config_dir)) {
+                File.Copy("appsettings.json", config_dir + "/appsettings.json");
             }
 
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) => Host
-            .CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((buildercontext, config) => {
-
-                config.AddJsonFile("/config/appsettings.json", optional: true);
+            Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((buildercontext, configbuilder) => {
+                configbuilder.AddConfiguration(config);
+                configbuilder.AddJsonFile(config_dir + "/appsettings.json", optional: true);
             })
             .ConfigureWebHostDefaults(webBuilder => {
                 webBuilder.UseStartup<Startup>();
-            });
+            }).Build().Run();
+        }
     }
 }

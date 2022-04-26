@@ -5,8 +5,13 @@ using Auricular.DataAccess.Entities;
 
 namespace Auricular.DataAccess.Sqlite {
     public class SqliteMediaLibrary : IMediaLibrary {
+        private SqliteDbContextSettings settings;
+        public SqliteMediaLibrary(SqliteDbContextSettings settings) {
+            this.settings = settings;
+        }
+
         public int AddEntry(MediaLibraryEntry entry) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 context.Add(entry);
                 context.SaveChanges();
 
@@ -15,13 +20,13 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public IEnumerable<MediaLibraryEntry> GetAllEntries() {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries.ToArray();
             }
         }
 
         public IEnumerable<MediaLibraryEntry> GetChildEntries(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.ParentId == id)
                     .ToArray();
@@ -29,7 +34,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public IEnumerable<MediaLibraryEntry> GetChildFiles(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.ParentId == id)
                     .Where(e => !e.IsFolder)
@@ -38,7 +43,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public IEnumerable<MediaLibraryEntry> GetChildFolders(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.ParentId == id)
                     .Where(e => e.IsFolder)
@@ -47,7 +52,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public MediaLibraryEntry GetEntry(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.Id == id)
                     .SingleOrDefault();
@@ -55,7 +60,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public MediaLibraryEntry GetEntryByPath(string fullName) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.Path == fullName)
                     .SingleOrDefault();
@@ -63,7 +68,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public long GetFileCount() {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => !e.IsFolder)
                     .Count();
@@ -71,7 +76,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public MediaLibraryEntry GetFile(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.Id == id)
                     .Where(e => !e.IsFolder)
@@ -80,7 +85,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public MediaLibraryEntry GetFolder(int id) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.Id == id)
                     .Where(e => e.IsFolder)
@@ -89,7 +94,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public IEnumerable<MediaLibraryEntry> GetNonRootFolders() {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.IsFolder)
                     .Where(e => e.ParentId >= 0)
@@ -106,7 +111,7 @@ namespace Auricular.DataAccess.Sqlite {
                 return null;
             }
 
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 MediaLibraryEntry rootDir = dir;
                 while (rootDir.ParentId >= 0) {
                     rootDir = context.LibraryEntries
@@ -119,7 +124,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public IEnumerable<MediaLibraryEntry> GetRootFolders() {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 return context.LibraryEntries
                     .Where(e => e.IsFolder)
                     .Where(e => e.ParentId == -1)
@@ -128,7 +133,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public void RemoveEntry(MediaLibraryEntry entry) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 context.Remove(entry);
                 context.SaveChanges();
             }
@@ -137,7 +142,7 @@ namespace Auricular.DataAccess.Sqlite {
         public void UpdateLastPlayed(int id) {
             DateTime now = DateTime.UtcNow;
 
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 MediaLibraryEntry entry = context.LibraryEntries
                     .Where(e => e.Id == id)
                     .SingleOrDefault();
@@ -159,7 +164,7 @@ namespace Auricular.DataAccess.Sqlite {
         }
 
         public void UpdateEntry(MediaLibraryEntry entry) {
-            using (var context = new SqliteDbContext()) {
+            using (var context = new SqliteDbContext(settings)) {
                 context.Update(entry);
                 context.SaveChanges();
             }

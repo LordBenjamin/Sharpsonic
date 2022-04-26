@@ -11,6 +11,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
+      "commandLineArgs": "--config_dir \"config\"",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
       "environmentVariables": {
