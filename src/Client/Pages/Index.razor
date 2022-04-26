@@ -20,7 +20,16 @@
     protected Album[]? Albums { get; set; }
 
     protected override async Task OnInitializedAsync() {
-        Albums = await GetAlbums();
+        // Wait for API to start
+        for (int i = 0; i < 5; i++) {
+            try {
+                Albums = await GetAlbums();
+                break;
+            } catch {
+                await Task.Delay(500);
+            }
+        }
+
         StateHasChanged();
 
         await base.OnInitializedAsync();
