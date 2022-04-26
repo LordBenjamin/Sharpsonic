@@ -63,12 +63,12 @@ namespace Auricular.Api.Controllers {
             return new AlbumListResponse {
                 Albums = query
                 .Select(i => new Album {
-                    Id = i.Id.ToString(CultureInfo.InvariantCulture),
-                    ParentId = i.ParentId.ToString(CultureInfo.InvariantCulture),
+                    Id = i.Id,
+                    ParentId = i.ParentId,
                     Title = i.Name,
                     Artist = i.Artist,
                     IsDir = true,
-                    CoverArt = i.Id.ToString(CultureInfo.InvariantCulture),
+                    // CoverArt = i.Id,
                 })
                 .ToArray(),
             };
