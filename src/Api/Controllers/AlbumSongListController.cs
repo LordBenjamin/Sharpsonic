@@ -24,7 +24,7 @@ namespace Auricular.Api.Controllers {
         [Route("getAlbumList.view")]
         public ActionResult<AlbumListResponse> GetAlbumList(
             string type,
-            int size = 10,
+            int size = 0,
             int offset = 0,
             int fromYear = -1,
             int toYear = int.MaxValue,
@@ -57,8 +57,12 @@ namespace Auricular.Api.Controllers {
             }
 
             query = query
-                .Skip(offset)
-                .Take(size);
+                .Skip(offset);
+
+            if (size > 0) {
+                query = query
+                    .Take(size);
+            }
 
             return new AlbumListResponse {
                 Albums = query
