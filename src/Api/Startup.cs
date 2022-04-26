@@ -14,6 +14,7 @@ using Auricular.Api.Serialization;
 using Auricular.Api.Settings;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Sqlite;
+using System.IO;
 
 namespace Auricular.Api {
     public class Startup {
@@ -30,6 +31,9 @@ namespace Auricular.Api {
 
             section = Configuration.GetSection(nameof(MediaLibrarySettings));
             services.Configure<MediaLibrarySettings>(section);
+
+            section = Configuration.GetSection(nameof(SqliteSettings));
+            services.Configure<SqliteSettings>(section);
 
             // Replace FormatFilter with one that is Subsonic URI compatible
             ServiceDescriptor descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(FormatFilter));
@@ -50,9 +54,14 @@ namespace Auricular.Api {
 
             });
 
-            var settings = new SqliteDbContextSettings() { ConnectionString = "Data Source=" + Configuration["config_dir"] + "/auricular.db" };
+            SqliteSettings sqliteSettings = section.Get<SqliteSettings>() ?? new SqliteSettings();
+            string databaseFileDirectory = Path.GetDirectoryName(sqliteSettings.DatabaseFilename);
+            if (!string.IsNullOrEmpty(databaseFileDirectory)) {
+                Directory.CreateDirectory(databaseFileDirectory);
+            }
 
-            using(var context = new SqliteDbContext(settings)) {
+            var settings = new SqliteDbContextSettings() { ConnectionString = "Data Source=" + sqliteSettings.DatabaseFilename };
+            using (var context = new SqliteDbContext(settings)) {
                 context.Database.Migrate();
             }
 
