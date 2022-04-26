@@ -6,11 +6,20 @@ using Auricular.DataAccess.Entities;
 
 namespace Auricular.DataAccess.Sqlite
 {
+    public class SqliteDbContextSettings {
+        public string ConnectionString { get; set; }
+    };
+
     public class SqliteDbContext : DbContext
     {
+        private readonly SqliteDbContextSettings settings;
+        public SqliteDbContext(SqliteDbContextSettings settings) {
+            this.settings = settings;
+        }
+
         public DbSet<MediaLibraryEntry> LibraryEntries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=/config/auricular.db");
+            => options.UseSqlite(settings.ConnectionString);
     }
 }

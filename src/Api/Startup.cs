@@ -50,10 +50,13 @@ namespace Auricular.Api {
 
             });
 
-            using(var context = new SqliteDbContext()) {
+            var settings = new SqliteDbContextSettings() { ConnectionString = "Data Source=" + Configuration["config_dir"] + "/auricular.db" };
+
+            using(var context = new SqliteDbContext(settings)) {
                 context.Database.Migrate();
             }
 
+            services.AddSingleton(settings);
             services.AddSingleton<IMediaLibrary, SqliteMediaLibrary>();
             services.AddSingleton<MediaScanner>();
             services.AddHostedService<MediaLibraryService>();
