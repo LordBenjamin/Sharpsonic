@@ -9,7 +9,8 @@ main {
 }
 
 footer {
-    background: #f7f7f7;
+    background-color: #f7f7f7;
+    border-top: 1px solid #d6d5d5;
     height:100px;
 }
 
