@@ -18,15 +18,17 @@ namespace Auricular.Api {
             }
 
             Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((buildercontext, configbuilder) => {
-                configbuilder.AddConfiguration(config);
-                if (!string.IsNullOrEmpty(config_dir)) {
-                    configbuilder.AddJsonFile(config_dir + "/appsettings.json", optional: true);
-                }
-            })
-            .ConfigureWebHostDefaults(webBuilder => {
-                webBuilder.UseStartup<Startup>();
-            }).Build().Run();
+                .ConfigureAppConfiguration((buildercontext, configbuilder) => {
+                    configbuilder.AddConfiguration(config);
+                    if (!string.IsNullOrEmpty(config_dir)) {
+                        configbuilder.AddJsonFile(config_dir + "/appsettings.json", optional: true);
+                    }
+                })
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .Build()
+                .Run();
         }
     }
 }
