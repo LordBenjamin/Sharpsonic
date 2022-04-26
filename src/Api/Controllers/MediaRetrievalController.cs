@@ -27,7 +27,9 @@ namespace Auricular.Api.Controllers {
 
             // Temporary!
             if (entry == null) {
-                entry = Index.GetChildEntries(id).FirstOrDefault();
+                entry = Index.GetChildEntries(id)
+                    .Where(e => !e.IsFolder)
+                    .FirstOrDefault();
             }
 
             Index.UpdateLastPlayed(id);

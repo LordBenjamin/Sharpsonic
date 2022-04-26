@@ -5,6 +5,7 @@ using Howler.Blazor.Components;
 namespace Auricular.Client.MediaPlayer {
     public class PlayerState {
         private readonly IHowl howl;
+        private int? currentSoundId;
 
         public event EventHandler<EventArgs> PlayerStateChanged;
 
@@ -19,7 +20,12 @@ namespace Auricular.Client.MediaPlayer {
 
             PlayerStateChanged?.Invoke(this, EventArgs.Empty);
 
-            await howl.Play(new HowlOptions {
+            if (currentSoundId is int soundId) {
+                await howl.Stop(soundId);
+                currentSoundId = null;
+            }
+
+            currentSoundId = await howl.Play(new HowlOptions {
                 Sources = new[] { url },
                 Formats = new[] { "mp3" },
                 Html5 = true,
