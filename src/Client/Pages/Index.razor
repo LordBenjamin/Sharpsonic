@@ -6,15 +6,22 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Audiobooks</h1>
 
-@if(Albums is Album[] albums) {
-    foreach(var item in albums) {
-        <p><a @onclick="async () => await ItemClicked(item)" style="cursor:pointer">@item.Title</a></p>
+<ul>
+    @if(Albums is Album[] albums) {
+        foreach(var item in albums) {
+            <li style="width: 300px; display: inline-block;">
+                <a @onclick="async () => await ItemClicked(item)" style="cursor:pointer">
+                    <img src="https://localhost:5001/rest/getCoverArt?id=@item.CoverArtId" style="width: 200px" />
+                    <p>@item.Title</p>
+                </a>
+            </li>
+        }
+    } else {
+        @:Loading...
     }
-} else {
-    @:Loading...
-}
+</ul>
 
 @code {
     protected Album[]? Albums { get; set; }

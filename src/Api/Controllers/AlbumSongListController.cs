@@ -23,7 +23,7 @@ namespace Auricular.Api.Controllers {
         [Route("getAlbumList")]
         [Route("getAlbumList.view")]
         public ActionResult<AlbumListResponse> GetAlbumList(
-            string type,
+            string type = "alphabeticalByName",
             int size = 0,
             int offset = 0,
             int fromYear = -1,
@@ -72,7 +72,7 @@ namespace Auricular.Api.Controllers {
                     Title = i.Name,
                     Artist = i.Artist,
                     IsDir = true,
-                    // CoverArt = i.Id,
+                    CoverArtId = i.Id,
                 })
                 .ToArray(),
             };
