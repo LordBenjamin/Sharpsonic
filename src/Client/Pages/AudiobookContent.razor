@@ -19,9 +19,14 @@
 <ul>
 @foreach(var item in Playlist.Items) {
     <li style="list-style-type: none;">
-        <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
-            <span class="oi oi-play-circle"></span>
-        </a>
+        @if (!Player.IsPlayingItem(item)) {
+            <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
+                <span class="oi oi-play-circle"></span>
+            </a>
+        } else {
+            <span class="oi oi-arrow-right"></span>
+        }
+        &nbsp;
         @(item.TrackSpecified ? $"{item.Track}  - " : string.Empty) @item.Title @(item.DurationSpecified ? string.Format("{0:D2}:{1:D2}", (int) item.Duration.TotalMinutes, item.Duration.Seconds) : string.Empty)</li>
 }
 </ul>
@@ -58,7 +63,20 @@
             .ToArray());
     }
 
+    protected override Task OnInitializedAsync() {
+        Player.PlayerStateChanged += Player_StateChanged;
+        return base.OnInitializedAsync();
+    }
+
     private async Task ItemClicked(PlaylistItem item) {
         await Player.Play(item);
+    }
+
+    private void Player_StateChanged(object sender, EventArgs e) {
+        StateHasChanged();
+    }
+
+    public void Dispose() {
+        Player.PlayerStateChanged -= Player_StateChanged;
     }
 }

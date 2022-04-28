@@ -95,6 +95,11 @@ namespace Auricular.Client.MediaPlayer {
             }
         }
 
+        public bool IsPlayingItem(PlaylistItem item) {
+            ArgumentNullException.ThrowIfNull(item);
+            return item.Equals(CurrentItem);
+        }
+
         public bool IsPlaying => currentSoundId.HasValue;
 
         public MediaRetrievalService MediaRetrievalService { get; }

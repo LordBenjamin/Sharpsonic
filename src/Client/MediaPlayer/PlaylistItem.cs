@@ -18,6 +18,10 @@ namespace Auricular.Client.MediaPlayer {
         }
 
         public bool Equals(PlaylistItem other) {
+            if (other == null) {
+                return false;
+            }
+
             return Id == other.Id &&
                    ParentId == other.ParentId &&
                    Artist == other.Artist &&
