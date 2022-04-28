@@ -2,9 +2,18 @@
 @implements IDisposable
 
 <div style="width:100%; text-align:center; padding-top:10px">
-    <h3>@PlayerState?.NowPlaying</h3>
-    <button @onclick=@(async() => await Play()) hidden=@(PlayerState.IsPlaying || PlayerState.Url is null)>Play</button>
-    <button @onclick=@(async() => await Stop()) hidden=@(!PlayerState.IsPlaying || PlayerState.Url is null)>Stop</button>
+    <p>@PlayerState?.NowPlaying</p>
+    @if (PlayerState?.StreamUri is not null) {
+        @if (PlayerState.IsPlaying == true) {
+            <a @onclick="async () => await Stop()" style="cursor: pointer">
+                <span class="oi oi-media-stop"></span>
+            </a>
+        } else {
+            <a @onclick="async () => await Play()" style="cursor: pointer">
+                <span class="oi oi-play-circle"></span>
+            </a>
+        }
+    }
 </div>
 
 @code {
@@ -15,7 +24,7 @@
     }
 
     public async Task Play() {
-        await PlayerState.Play(PlayerState.Url, PlayerState.NowPlaying);
+        await PlayerState.Play(PlayerState.StreamUri, PlayerState.NowPlaying);
     }
 
     public async Task Stop() {

@@ -1,8 +1,10 @@
 @page "/"
 @using Auricular.Client.MediaPlayer
+@using Auricular.Client.Services
 @using Auricular.DataTransfer
-@inject HttpClient HttpClient
 @inject PlayerState Player
+@inject AlbumSongListService AlbumSongListService
+@inject MediaRetrievalService MediaRetrievalService
 
 <PageTitle>Index</PageTitle>
 
@@ -11,10 +13,13 @@
 <ul>
     @if(Albums is Album[] albums) {
         foreach(var item in albums) {
-            <li style="width: 300px; display: inline-block;">
-                <a @onclick="async () => await ItemClicked(item)" style="cursor:pointer">
-                    <img src="https://localhost:5001/rest/getCoverArt?id=@item.CoverArtId" style="width: 200px" />
-                    <p>@item.Title</p>
+            <li style="width: 250px; margin-right: 10px; display: inline-block;">
+                <a href="audiobook/@item.Id" style="text-decoration: none; color: black;">
+                    <img src="@MediaRetrievalService.GetCoverArtUri(item.CoverArtId.Value)" style="width: 250px" />
+                    <p style="text-align:center;">
+                        <a @onclick="async () => await ItemClicked(item)" @onclick:preventDefault="true"><span class="oi oi-play-circle"></span></a>
+                        @item.Title
+                    </p>
                 </a>
             </li>
         }
@@ -30,7 +35,7 @@
         // Wait for API to start
         for (int i = 0; i < 5; i++) {
             try {
-                Albums = await GetAlbums();
+                Albums = await AlbumSongListService.GetAlbums();
                 break;
             } catch {
                 await Task.Delay(500);
@@ -42,11 +47,7 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task<Album[]?> GetAlbums() {
-        return (await HttpClient.GetFromJsonAsync<AlbumListResponse>("https://localhost:5001/rest/getAlbumList"))?.Albums;
-    }
-
     private async Task ItemClicked (Album item) {
-        await Player.Play($"https://localhost:5001/rest/stream?id={item.Id}", $"{item.Title} - {item.Artist}");
+        await Player.Play(MediaRetrievalService.GetItemUri(item.Id.Value), $"{item.Title} - {item.Artist}");
     }
 }

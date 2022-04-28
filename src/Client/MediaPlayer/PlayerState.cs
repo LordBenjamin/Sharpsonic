@@ -13,18 +13,18 @@ namespace Auricular.Client.MediaPlayer {
             this.howl = howl;
         }
 
-        public string? Url { get; private set; }
+        public Uri? StreamUri { get; private set; }
         public string NowPlaying { get; private set; } = "Player";
 
-        public async ValueTask Play(string url, string nowPlaying) {
-            Url = url;
+        public async ValueTask Play(Uri streamUri, string nowPlaying) {
+            StreamUri = streamUri;
 
             NowPlaying = nowPlaying;
 
             await Stop();
 
             currentSoundId = await howl.Play(new HowlOptions {
-                Sources = new[] { url },
+                Sources = new[] { streamUri.AbsoluteUri },
                 Formats = new[] { "mp3" },
                 Html5 = true,
                 Loop = false,

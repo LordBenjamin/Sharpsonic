@@ -1,0 +1,54 @@
+@page "/audiobook/{id:int}"
+@using Auricular.Client.MediaPlayer
+@using Auricular.Client.Services
+@using Auricular.DataTransfer
+@inject PlayerState Player
+@inject BrowsingService BrowsingService
+@inject MediaRetrievalService MediaRetrievalService
+
+<PageTitle>@BookTitle</PageTitle>
+
+<h1>@BookTitle</h1>
+
+@if (Id is int id) {
+  <img src="@MediaRetrievalService.GetCoverArtUri(id)" style="width: 250px" />
+}
+
+<h2>Chapters</h2>
+
+<ul>
+@foreach(var item in Items) {
+    <li style="list-style-type: none;">
+        <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
+            <span class="oi oi-play-circle"></span>
+        </a>
+        @(item.TrackSpecified ? $"{item.Track}  - " : string.Empty) @item.Title</li>
+}
+</ul>
+
+@code {
+    public string BookTitle { get; set; } = "Loading";
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    public DirectoryListingItem[] Items { get; set; } = Array.Empty<DirectoryListingItem>();
+
+    protected override async Task OnParametersSetAsync() {
+        if (Id is int id) {
+            await LoadBook(id);
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadBook(int id) {
+        DirectoryListingResponse result = await BrowsingService.GetDirectory(id);
+        BookTitle = result.Name;
+        Items = result.Items;
+    }
+
+    private async Task ItemClicked(DirectoryListingItem item) {
+        await Player.Play(MediaRetrievalService.GetItemUri(item.Id.Value), $"{item.Title} - {item.Artist}");
+    }
+}

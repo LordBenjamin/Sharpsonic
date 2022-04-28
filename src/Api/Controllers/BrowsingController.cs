@@ -39,40 +39,36 @@ namespace Auricular.Api.Controllers {
         [HttpGet]
         [Route("getMusicDirectory")]
         [Route("getMusicDirectory.view")]
-        public ActionResult<Response> GetMusicDirectory(int id) {
+        public ActionResult<DirectoryListingResponse> GetMusicDirectory(int id) {
             MediaLibraryEntry dir = Index.GetFolder(id);
 
             MediaLibraryEntry rootDir = Index.GetRootFolderFor(id);
 
-            return new Response {
-                Item = new Directory {
-                    id = dir.Id.ToString(CultureInfo.InvariantCulture),
-                    name = dir.Name,
-                    parent = dir.ParentId.ToString(CultureInfo.InvariantCulture),
-                    child = Index.GetChildEntries(id)
-                        .Select(i => new Child {
-                            id = i.Id.ToString(CultureInfo.InvariantCulture),
-                            parent = i.ParentId.ToString(CultureInfo.InvariantCulture),
-                            artist = i.Artist,
-                            title = i.Name,
-                            album = dir.Name,
-                            isDir = i.IsFolder,
-                            track = i.TrackNumber ?? 0,
-                            trackSpecified = i.TrackNumber.HasValue,
-                            coverArt = (i.IsFolder ? i.Id : i.ParentId).ToString(CultureInfo.InvariantCulture),
-                            duration = i.Duration.HasValue ? (int)System.Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
-                            durationSpecified = i.Duration.HasValue,
-                            path = System.IO.Path.GetRelativePath(rootDir.Path, i.Path),
+            return new DirectoryListingResponse {
+                    Id = dir.Id,
+                    Name = dir.Name,
+                    ParentId = dir.ParentId,
+                    Items = Index.GetChildEntries(id)
+                        .Select(i => new DirectoryListingItem {
+                            Id = i.Id,
+                            ParentId = i.ParentId,
+                            Artist = i.Artist,
+                            Title = i.Name,
+                            Album = dir.Name,
+                            IsDir = i.IsFolder,
+                            Track = i.TrackNumber ?? 0,
+                            TrackSpecified = i.TrackNumber.HasValue,
+                            CoverArt = (i.IsFolder ? i.Id : i.ParentId),
+                            Duration = i.Duration.HasValue ? (int)System.Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
+                            DurationSpecified = i.Duration.HasValue,
+                            Path = System.IO.Path.GetRelativePath(rootDir.Path, i.Path),
                         })
-                        .OrderBy(i => i.trackSpecified)
-                        .ThenBy(i => i.album)
-                        .ThenBy(i => i.track)
-                        .ThenBy(i => i.title)
+                        .OrderBy(i => i.TrackSpecified)
+                        .ThenBy(i => i.Album)
+                        .ThenBy(i => i.Track)
+                        .ThenBy(i => i.Title)
                         .ToArray(),
-                },
-                ItemElementName = ItemChoiceType.directory,
-                version = "1.14.0",
-            };
+                };
         }
 
         [HttpGet]
