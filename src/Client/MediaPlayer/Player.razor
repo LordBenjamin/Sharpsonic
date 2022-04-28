@@ -1,8 +1,12 @@
+@using Auricular.DataTransfer
 @inject PlayerState PlayerState;
 @implements IDisposable
 
 <div style="width:100%; text-align:center; padding-top:10px">
-    <p>@PlayerState?.NowPlaying</p>
+    <p>@PlayerState?.CurrentItem?.Title</p>
+    <p>@PlayerState?.CurrentItem?.Album</p>
+    <p>@PlayerState?.CurrentItem?.Artist</p>
+
     @if (PlayerState?.StreamUri is not null) {
         @if (PlayerState.IsPlaying == true) {
             <a @onclick="async () => await Stop()" style="cursor: pointer">
@@ -24,7 +28,9 @@
     }
 
     public async Task Play() {
-        await PlayerState.Play(PlayerState.StreamUri, PlayerState.NowPlaying);
+        if(PlayerState.CurrentItem is PlaylistItem item) {
+            await PlayerState.Play(item);
+        }
     }
 
     public async Task Stop() {

@@ -3,6 +3,7 @@
 @using Auricular.Client.Services
 @using Auricular.DataTransfer
 @inject PlayerState Player
+@inject BrowsingService BrowsingService
 @inject AlbumSongListService AlbumSongListService
 @inject MediaRetrievalService MediaRetrievalService
 
@@ -48,6 +49,19 @@
     }
 
     private async Task ItemClicked (Album item) {
-        await Player.Play(MediaRetrievalService.GetItemUri(item.Id.Value), $"{item.Title} - {item.Artist}");
+        var response = await BrowsingService.GetDirectory(item.Id.Value);
+
+        var playlist = new Auricular.Client.MediaPlayer.Playlist(response.Items!
+            .Select(i => new PlaylistItem {
+                Id = i.Id.Value,
+                TrackSpecified = i.TrackSpecified,
+                Track = i.Track,
+                Title = i.Title,
+                Duration = i.Duration,
+                DurationSpecified = i.DurationSpecified,
+            })
+            .ToArray());
+
+        await Player.Play(playlist);
     }
 }

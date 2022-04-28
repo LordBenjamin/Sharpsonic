@@ -17,7 +17,7 @@
 <h2>Chapters</h2>
 
 <ul>
-@foreach(var item in Items) {
+@foreach(var item in Playlist.Items) {
     <li style="list-style-type: none;">
         <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
             <span class="oi oi-play-circle"></span>
@@ -32,7 +32,7 @@
     [Parameter]
     public int? Id { get; set; }
 
-    public DirectoryListingItem[] Items { get; set; } = Array.Empty<DirectoryListingItem>();
+    public Auricular.Client.MediaPlayer.Playlist Playlist { get; set; } = Auricular.Client.MediaPlayer.Playlist.Empty;
 
     protected override async Task OnParametersSetAsync() {
         if (Id is int id) {
@@ -43,12 +43,22 @@
     }
 
     private async Task LoadBook(int id) {
-        DirectoryListingResponse result = await BrowsingService.GetDirectory(id);
-        BookTitle = result.Name;
-        Items = result.Items;
+        DirectoryListingResponse response = await BrowsingService.GetDirectory(id);
+        BookTitle = response.Name;
+
+        Playlist = new Auricular.Client.MediaPlayer.Playlist(response.Items!
+            .Select(i => new PlaylistItem {
+                Id = i.Id.Value,
+                TrackSpecified = i.TrackSpecified,
+                Track = i.Track,
+                Title = i.Title,
+                Duration = i.Duration,
+                DurationSpecified = i.DurationSpecified,
+            })
+            .ToArray());
     }
 
-    private async Task ItemClicked(DirectoryListingItem item) {
-        await Player.Play(MediaRetrievalService.GetItemUri(item.Id.Value), $"{item.Title} - {item.Artist}");
+    private async Task ItemClicked(PlaylistItem item) {
+        await Player.Play(item);
     }
 }

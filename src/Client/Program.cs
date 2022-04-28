@@ -12,14 +12,14 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001/") });
+builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001/") });
 
 builder.Services.AddSingleton<IHowl, Howl>();
 builder.Services.AddSingleton<IHowlGlobal, HowlGlobal>();
 builder.Services.AddSingleton<PlayerState>();
 
-builder.Services.AddScoped<AlbumSongListService>();
-builder.Services.AddScoped<MediaRetrievalService>();
-builder.Services.AddScoped<BrowsingService>();
+builder.Services.AddSingleton<AlbumSongListService>();
+builder.Services.AddSingleton<MediaRetrievalService>();
+builder.Services.AddSingleton<BrowsingService>();
 
 await builder.Build().RunAsync();
