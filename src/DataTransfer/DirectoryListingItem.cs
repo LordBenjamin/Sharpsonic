@@ -15,7 +15,7 @@ namespace Auricular.DataTransfer {
         public int Track { get; set; }
         public bool TrackSpecified { get; set; }
         public int? CoverArt { get; set; }
-        public int Duration { get; set; }
+        public TimeSpan Duration { get; set; }
         public bool DurationSpecified { get; set; }
         public string? Path { get; set; }
     }

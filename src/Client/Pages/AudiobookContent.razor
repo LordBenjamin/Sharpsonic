@@ -22,7 +22,7 @@
         <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
             <span class="oi oi-play-circle"></span>
         </a>
-        @(item.TrackSpecified ? $"{item.Track}  - " : string.Empty) @item.Title</li>
+        @(item.TrackSpecified ? $"{item.Track}  - " : string.Empty) @item.Title @(item.DurationSpecified ? string.Format("{0:D2}:{1:D2}", (int) item.Duration.TotalMinutes, item.Duration.Seconds) : string.Empty)</li>
 }
 </ul>
 

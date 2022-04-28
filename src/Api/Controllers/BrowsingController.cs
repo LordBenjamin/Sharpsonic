@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Auricular.DataTransfer;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
+using TimeSpan = System.TimeSpan;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
@@ -59,7 +60,7 @@ namespace Auricular.Api.Controllers {
                             Track = i.TrackNumber ?? 0,
                             TrackSpecified = i.TrackNumber.HasValue,
                             CoverArt = (i.IsFolder ? i.Id : i.ParentId),
-                            Duration = i.Duration.HasValue ? (int)System.Math.Ceiling(i.Duration.Value.TotalSeconds) : 0,
+                            Duration = i.Duration ?? TimeSpan.Zero,
                             DurationSpecified = i.Duration.HasValue,
                             Path = System.IO.Path.GetRelativePath(rootDir.Path, i.Path),
                         })
