@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   api:
-    image: ${DOCKER_REGISTRY-}auricular
+    image: ${DOCKER_REGISTRY-}auricular-api
     volumes:
     - /host_mnt/d/Users/Ben/Documents/Audiobooks:/books
     ports:
