@@ -12,7 +12,9 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001/") });
+var apiConfigSection = builder.Configuration.GetSection("Api");
+
+builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(apiConfigSection["BaseUrl"]) });
 
 builder.Services.AddSingleton<IHowl, Howl>();
 builder.Services.AddSingleton<IHowlGlobal, HowlGlobal>();
