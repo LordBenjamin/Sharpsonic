@@ -1,16 +1,17 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Auricular.DataTransfer;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
+using Auricular.DataTransfer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TimeSpan = System.TimeSpan;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class BrowsingController : ControllerBase {
 
         public BrowsingController(IMediaLibrary index) {

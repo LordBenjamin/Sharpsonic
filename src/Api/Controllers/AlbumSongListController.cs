@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Auricular.DataTransfer;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class AlbumSongListController : ControllerBase {
 
         public AlbumSongListController(IMediaLibrary index) {

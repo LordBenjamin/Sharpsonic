@@ -2,15 +2,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
-using Auricular.DataAccess.InMemory;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class MediaRetrievalController : ControllerBase {
         public MediaRetrievalController(IMediaLibrary index) {
             Index = index;

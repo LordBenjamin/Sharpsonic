@@ -4,11 +4,13 @@ using Microsoft.Extensions.Options;
 using Auricular.DataTransfer;
 using Auricular.Api.Settings;
 using Auricular.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class UserManagementController : ControllerBase {
         public UserManagementController(IOptions<ApplicationSettings> appSettings, IMediaLibrary index) {
             Settings = appSettings.Value;

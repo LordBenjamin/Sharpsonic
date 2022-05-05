@@ -1,14 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Auricular.DataTransfer;
 using Auricular.Api.Media;
 using Auricular.DataAccess;
+using Auricular.DataTransfer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class MediaScanningController {
         public MediaScanningController(IMediaLibrary index, MediaScanner scanner) {
             Index = index ?? throw new ArgumentNullException(nameof(index));

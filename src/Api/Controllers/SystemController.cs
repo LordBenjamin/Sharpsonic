@@ -1,14 +1,17 @@
 using Auricular.DataTransfer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
     [ApiController]
     [FormatFilter]
+    [Authorize]
     public class SystemController : ControllerBase {
         [HttpGet]
         [Route("ping")]
         [Route("ping.view")]
+        [AllowAnonymous]
         public ActionResult<Response> Ping() {
             return new Response();
         }

@@ -1,5 +1,7 @@
 @using Auricular.Client.MediaPlayer
+@using Auricular.Client.Security
 @inherits LayoutComponentBase
+@inject CustomAuthStateProvider AuthStateProvider
 
 <div class="page">
     <div class="sidebar">
@@ -8,7 +10,7 @@
 
     <main>
         <div class="top-row px-4">
-            @*<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>*@
+            <p>@AuthStateProvider.UserName</p>
         </div>
 
         <article class="content px-4">

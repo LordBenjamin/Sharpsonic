@@ -1,0 +1,29 @@
+@using Auricular.Client.Security
+@using Auricular.DataTransfer.Security
+@using System.Net
+@page "/login"
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<EditForm Model=@Model OnValidSubmit=@TryLogin>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div><InputText id="username" @bind-Value="Model.UserName" placeholder="Username" /></div>
+    <div><InputText id="password" @bind-Value="Model.Password" type="password" placeholder="Password" /></div>
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    public LoginRequest Model { get; set; } = new LoginRequest();
+
+    public async Task TryLogin() {
+        AuthStateProvider.SetCredentials(new NetworkCredential(Model.UserName, Model.Password));
+        NavigationManager.NavigateTo("/");
+    }
+}
