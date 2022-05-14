@@ -69,6 +69,11 @@
     }
 
     private async Task ItemClicked(PlaylistItem item) {
+        if (!Player.Playlist.Items.Contains(item))
+        {
+            Player.SetPlaylist(Playlist);
+        }
+
         await Player.Play(item);
     }
 
