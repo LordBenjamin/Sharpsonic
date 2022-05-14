@@ -35,6 +35,7 @@ namespace Auricular.Api {
             services.Configure<SqliteSettings>(section);
 
             services.AddCors();
+            services.AddMemoryCache();
 
             // Require authenticated user by default
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

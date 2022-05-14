@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
@@ -16,12 +18,13 @@ namespace Auricular.Api.Controllers {
     [FormatFilter]
     [Authorize]
     public class MediaRetrievalController : ControllerBase {
-        public MediaRetrievalController(IMediaLibrary index) {
+        public MediaRetrievalController(IMediaLibrary index, IMemoryCache cache) {
             Index = index;
+            Cache = cache;
         }
 
         public IMediaLibrary Index { get; }
-
+        public IMemoryCache Cache { get; }
 
         [HttpGet]
         [Route("stream")]
@@ -48,6 +51,11 @@ namespace Auricular.Api.Controllers {
         [Route("getCoverArt")]
         [Route("getCoverArt.view")]
         public async Task<ActionResult> GetCoverArt(int id) {
+            string cacheKey = $"CoverArt_{id.ToString(CultureInfo.InvariantCulture)}";
+            if (Cache.TryGetValue<byte[]>(cacheKey, out byte[] cachedItem)) {
+                return File(cachedItem, "image/jpeg");
+            }
+
             MediaLibraryEntry entry = Index.GetEntry(id);
 
             bool originalIsFolder = entry.IsFolder;
@@ -60,6 +68,8 @@ namespace Auricular.Api.Controllers {
 
                     if (image != null) {
                         byte[] bytes = await GenerateThumbnail(image.Data.Data);
+                        Cache.Set(cacheKey, bytes);
+
                         return new FileContentResult(bytes, "image/jpeg");
                     }
                 }
@@ -88,6 +98,8 @@ namespace Auricular.Api.Controllers {
 
                         if (image != null) {
                             byte[] bytes = await GenerateThumbnail(image.Data.Data);
+                            Cache.Set(cacheKey, bytes);
+
                             return new FileContentResult(bytes, "image/jpeg");
                         }
                     }
@@ -99,6 +111,8 @@ namespace Auricular.Api.Controllers {
             }
 
             byte[] bytes1 = await GenerateThumbnail(System.IO.File.ReadAllBytes(file.FullName));
+            Cache.Set(cacheKey, bytes1);
+
             return new FileContentResult(bytes1, "image/jpeg");
         }
 
