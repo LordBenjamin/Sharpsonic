@@ -2,10 +2,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Auricular.DataAccess;
 using Auricular.DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Auricular.Api.Controllers {
     [Route("rest")]
@@ -39,10 +42,12 @@ namespace Auricular.Api.Controllers {
             return new FileStreamResult(entry.OpenReadStream(), "audio/mp3");
         }
 
+        // TODO: Cache thumbnails after generation
+        // TODO: Etag cache control
         [HttpGet]
         [Route("getCoverArt")]
         [Route("getCoverArt.view")]
-        public ActionResult GetCoverArt(int id) {
+        public async Task<ActionResult> GetCoverArt(int id) {
             MediaLibraryEntry entry = Index.GetEntry(id);
 
             bool originalIsFolder = entry.IsFolder;
@@ -54,7 +59,8 @@ namespace Auricular.Api.Controllers {
                         .FirstOrDefault();
 
                     if (image != null) {
-                        return new FileContentResult(image.Data.Data, image.MimeType);
+                        byte[] bytes = await GenerateThumbnail(image.Data.Data);
+                        return new FileContentResult(bytes, "image/jpeg");
                     }
                 }
 
@@ -81,7 +87,8 @@ namespace Auricular.Api.Controllers {
                             .FirstOrDefault();
 
                         if (image != null) {
-                            return new FileContentResult(image.Data.Data, image.MimeType);
+                            byte[] bytes = await GenerateThumbnail(image.Data.Data);
+                            return new FileContentResult(bytes, "image/jpeg");
                         }
                     }
 
@@ -91,7 +98,25 @@ namespace Auricular.Api.Controllers {
                 return new FileContentResult(Array.Empty<byte>(), "image/jpeg");
             }
 
-            return new FileStreamResult(file.OpenRead(), "image/jpeg");
+            byte[] bytes1 = await GenerateThumbnail(System.IO.File.ReadAllBytes(file.FullName));
+            return new FileContentResult(bytes1, "image/jpeg");
+        }
+
+        private async Task<byte[]> GenerateThumbnail(byte[] data) {
+            using var stream = new MemoryStream();
+            await GenerateThumbnail(data, stream);
+
+            return stream.ToArray();
+        }
+
+        private async Task GenerateThumbnail(byte[] data, Stream writeToStream) {
+            using var image = Image.Load(data);
+            image.Mutate(i => i.Resize(new ResizeOptions() {
+                Size = new Size(256),
+                Mode = ResizeMode.Max,
+            }));
+
+            await image.SaveAsJpegAsync(writeToStream);
         }
     }
 }
