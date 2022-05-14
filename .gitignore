@@ -351,3 +351,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# SQLite database
+/src/Api/auricular.db
+/src/Api/auricular.db-shm
+/src/Api/auricular.db-wal
