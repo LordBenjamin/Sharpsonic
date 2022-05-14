@@ -3,21 +3,27 @@
 @implements IDisposable
 
 <div style="width:100%; text-align:center; padding-top:10px">
-    <p>@PlayerState?.CurrentItem?.Title</p>
-    <p>@PlayerState?.CurrentItem?.Album</p>
-    <p>@PlayerState?.CurrentItem?.Artist</p>
+    <div>
+        <p>@PlayerState?.CurrentItem?.Title</p>
+        <p>@PlayerState?.CurrentItem?.Album</p>
+        <p>@PlayerState?.CurrentItem?.Artist</p>
 
-    @if (PlayerState?.StreamUri is not null) {
-        @if (PlayerState.IsPlaying == true) {
-            <a @onclick="async () => await Stop()" style="cursor: pointer">
-                <span class="oi oi-media-stop"></span>
-            </a>
-        } else {
-            <a @onclick="async () => await Play()" style="cursor: pointer">
-                <span class="oi oi-play-circle"></span>
-            </a>
+        @if (PlayerState?.StreamUri is not null)
+        {
+            @if (PlayerState.IsPlaying == true)
+            {
+                <a @onclick="async () => await Stop()" style="cursor: pointer">
+                    <span class="oi oi-media-stop media-control-button"></span>
+                </a>
+            }
+            else
+            {
+                <a @onclick="async () => await Play()" style="cursor: pointer">
+                    <span class="oi oi-play-circle media-control-button"></span>
+                </a>
+            }
         }
-    }
+    </div>
 </div>
 
 @code {
@@ -27,13 +33,16 @@
         return base.OnInitializedAsync();
     }
 
-    public async Task Play() {
-        if(PlayerState.CurrentItem is PlaylistItem item) {
+    public async Task Play()
+    {
+        if (PlayerState.CurrentItem is PlaylistItem item)
+        {
             await PlayerState.Play(item);
         }
     }
 
-    public async Task Stop() {
+    public async Task Stop()
+    {
         await PlayerState.Stop();
     }
 
