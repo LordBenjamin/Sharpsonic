@@ -43,7 +43,8 @@ namespace Auricular.Api.Controllers {
             Index.UpdateLastPlayed(id);
 
             // howler.js HTML5 playback mode relies on range-requests
-            return File(entry.OpenReadStream(), "audio/mp3", enableRangeProcessing: true);
+            // TODO: Proper MIME type support
+            return File(entry.OpenReadStream(), "audio/mpeg", enableRangeProcessing: true);
         }
 
         // TODO: Cache thumbnails after generation

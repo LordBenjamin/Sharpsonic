@@ -11,6 +11,12 @@ using Auricular.DataAccess.Entities;
 
 namespace Auricular.Api.Media {
     public class MediaScanner {
+        private static readonly HashSet<string> SupportedFileExtensions = new HashSet<string> {
+            ".mp3",
+            ".m4a",
+            ".m4b",
+        };
+
         private readonly object scanLockObject = new object();
 
         public MediaScanner(IOptions<MediaLibrarySettings> settings, IMediaLibrary library, ILogger<MediaScanner> logger) {
@@ -83,7 +89,7 @@ namespace Auricular.Api.Media {
                     if (info2.Name != "__MACOSX") {
                         Scan(directoryEntry.Id, ref numFilesAdded, directoryInfo);
                     }
-                } else if (info2.Name.EndsWith(".mp3")) {
+                } else if (SupportedFileExtensions.Contains(info2.Extension, StringComparer.OrdinalIgnoreCase)) {
                     bool added = AddOrUpdateFileEntry(directoryEntry.Id, (FileInfo)info2, albumNames);
                     if (added) {
                         numFilesAdded++;
