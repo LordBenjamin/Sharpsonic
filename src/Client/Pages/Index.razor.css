@@ -1,0 +1,21 @@
+img.cover-art {
+  width: 250px;
+}
+
+li {
+  width: 250px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+  li > a {
+    text-decoration: none;
+    color: black;
+  }
+
+    li > a > p {
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }

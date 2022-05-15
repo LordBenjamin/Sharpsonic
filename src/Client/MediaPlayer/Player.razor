@@ -2,30 +2,30 @@
 @inject PlayerState PlayerState;
 @implements IDisposable
 
-<div style="display:grid; grid-template-columns: 1fr 1fr 1fr;">
-    <div style="line-height: 100px; margin-left: 10px;">
+<div class="player-outer">
+    <div class="title-area">
         <p>@PlayerState?.CurrentItem?.Title</p>
     </div>
 
-    <div style="width:100%; text-align:center; line-height: 100px;">
+    <div class="play-pause-area">
         @if (PlayerState?.StreamUri is not null)
         {
             @if (PlayerState.IsPlaying == true)
             {
-                <a @onclick="async () => await Pause()" style="cursor: pointer">
+                <a @onclick="async () => await Pause()" class="link-ptr">
                     <span class="oi oi-media-pause media-control-button"></span>
                 </a>
             }
             else
             {
-                <a @onclick="async () => await Play()" style="cursor: pointer">
+                <a @onclick="async () => await Play()" class="link-ptr">
                     <span class="oi oi-play-circle media-control-button"></span>
                 </a>
             }
         }
     </div>
 
-    <div style="line-height: 100px; max-width: 100px">
+    <div class="seek-area">
         <SeekBar Player=@PlayerState />
     </div>
 </div>

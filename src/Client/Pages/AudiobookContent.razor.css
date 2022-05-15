@@ -1,0 +1,11 @@
+img.cover-art {
+  width: 250px;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  cursor: pointer;
+}

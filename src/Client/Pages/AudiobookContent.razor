@@ -11,16 +11,16 @@
 <h1>@BookTitle</h1>
 
 @if (Id is int id) {
-  <img src="@MediaRetrievalService.GetCoverArtUri(id)" style="width: 250px" />
+  <img src="@MediaRetrievalService.GetCoverArtUri(id)" class="cover-art" />
 }
 
 <h2>Chapters</h2>
 
 <ul>
 @foreach(var item in Playlist.Items) {
-    <li style="list-style-type: none;">
+    <li>
         @if (!Player.IsPlayingItem(item)) {
-            <a @onclick="async () => await ItemClicked(item)" style="cursor: pointer">
+            <a @onclick="async () => await ItemClicked(item)">
                 <span class="oi oi-play-circle"></span>
             </a>
         } else {

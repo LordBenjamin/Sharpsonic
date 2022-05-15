@@ -15,11 +15,13 @@
 <ul>
     @if(Albums is Album[] albums) {
         foreach(var item in albums) {
-            <li style="width: 250px; margin-right: 10px; display: inline-block;">
-                <a href="audiobook/@item.Id" style="text-decoration: none; color: black;">
-                    <img src="@MediaRetrievalService.GetCoverArtUri(item.CoverArtId.Value)" style="width: 250px" />
-                    <p style="text-align:center;">
-                        <a @onclick="async () => await ItemClicked(item)" @onclick:preventDefault="true"><span class="oi oi-play-circle"></span></a>
+            <li title="@item.Title">
+                <a href="audiobook/@item.Id">
+                    <img src="@MediaRetrievalService.GetCoverArtUri(item.CoverArtId.Value)" class="cover-art" />
+                    <p>
+                        <a @onclick="async () => await ItemClicked(item)" @onclick:preventDefault="true">
+                            <span class="oi oi-play-circle"></span>
+                        </a>
                         @item.Title
                     </p>
                 </a>

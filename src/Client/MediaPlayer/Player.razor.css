@@ -1,3 +1,27 @@
+.player-outer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.title-area {
+  line-height: 100px;
+  margin-left: 10px;
+}
+
+.play-pause-area {
+  width: 100%;
+  text-align: center;
+  line-height: 100px;
+}
+
+a.link-ptr {
+  cursor: pointer;
+}
+
 .media-control-button {
     font-size: 2rem;
+}
+.seek-area {
+  line-height: 100px;
+  max-width: 100px
 }
