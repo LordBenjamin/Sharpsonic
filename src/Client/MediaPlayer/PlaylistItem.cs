@@ -17,7 +17,7 @@ namespace Auricular.Client.MediaPlayer {
             return obj is PlaylistItem item && Equals(item);
         }
 
-        public bool Equals(PlaylistItem other) {
+        public bool Equals(PlaylistItem? other) {
             if (other == null) {
                 return false;
             }

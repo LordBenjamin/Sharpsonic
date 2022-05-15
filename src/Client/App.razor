@@ -6,7 +6,7 @@
                     <text>Authorizing...</text>
                 </Authorizing>
                 <NotAuthorized>
-                    @if (context.User.Identity.IsAuthenticated == false)
+                    @if (context?.User?.Identity?.IsAuthenticated == false)
                     {
                         <text>Not logged in</text>
                         <Auricular.Client.Security.RedirectToLogin />

@@ -38,7 +38,7 @@ namespace Auricular.Client.MediaPlayer {
         }
 
         public Uri? StreamUri { get; private set; }
-        public PlaylistItem CurrentItem { get; private set; }
+        public PlaylistItem? CurrentItem { get; private set; }
 
         public Playlist Playlist { get; private set; } = Playlist.Empty;
 

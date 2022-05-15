@@ -48,12 +48,12 @@
     }
 
     private async Task LoadBook(int id) {
-        DirectoryListingResponse response = await BrowsingService.GetDirectory(id);
-        BookTitle = response.Name;
+        DirectoryListingResponse response = await BrowsingService.GetDirectory(id)!;
+        BookTitle = response.Name!;
 
         Playlist = new Auricular.Client.MediaPlayer.Playlist(response.Items!
             .Select(i => new PlaylistItem {
-                Id = i.Id.Value,
+                Id = i.Id!.Value,
                 TrackSpecified = i.TrackSpecified,
                 Track = i.Track,
                 Title = i.Title,
