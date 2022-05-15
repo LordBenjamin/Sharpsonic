@@ -4,7 +4,11 @@
 
 <div class="player-outer">
     <div class="title-area">
-        <p>@PlayerState?.CurrentItem?.Title</p>
+        <div>@PlayerState?.CurrentItem?.Title</div>
+        <div>
+            <input type="checkbox" @bind-value=@ShouldStopAtEndOfChapter id="sleep-stop" />
+            <label for="sleep-stop">Sleep mode</label>
+        </div>
     </div>
 
     <div class="play-pause-area">
@@ -31,6 +35,15 @@
 </div>
 
 @code {
+    public bool ShouldStopAtEndOfChapter {
+        get { return PlayerState?.ShouldStopAtEndOfChapter ?? false; }
+        set {
+            if(PlayerState is PlayerState player) {
+                player.ShouldStopAtEndOfChapter = value;
+            }
+        }
+    }
+
     protected override Task OnInitializedAsync()
     {
         PlayerState.PlayerStateChanged += Player_StateChanged;

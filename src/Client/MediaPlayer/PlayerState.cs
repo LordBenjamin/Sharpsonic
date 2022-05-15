@@ -37,6 +37,7 @@ namespace Auricular.Client.MediaPlayer {
             Console.WriteLine(e.Error);
         }
 
+        public bool ShouldStopAtEndOfChapter { get; set; }
         public Uri? StreamUri { get; private set; }
         public PlaylistItem? CurrentItem { get; private set; }
 
@@ -56,10 +57,12 @@ namespace Auricular.Client.MediaPlayer {
         public async ValueTask Play() {
             if (currentSoundId is int soundId) {
                 await howl.Play(soundId);
-            }
 
-            timer.Start();
-            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
+                timer.Start();
+                PlayerStateChanged?.Invoke(this, EventArgs.Empty);
+            } else if (CurrentItem is PlaylistItem playlistItem) {
+                await Play(playlistItem);
+            }
         }
 
         public async ValueTask Play(PlaylistItem item) {
@@ -143,6 +146,11 @@ namespace Auricular.Client.MediaPlayer {
                 }
 
                 await Play(Playlist.Items[index + 1]);
+
+                if (ShouldStopAtEndOfChapter) {
+                    await Stop();
+                    return;
+                }
             }
         }
 
