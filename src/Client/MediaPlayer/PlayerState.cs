@@ -10,15 +10,13 @@ using Microsoft.JSInterop;
 namespace Auricular.Client.MediaPlayer {
     public class PlayerState {
         private readonly IHowl howl;
-        private readonly IJSRuntime jsRuntime;
         private int? currentSoundId;
 
         public event EventHandler<EventArgs>? PlayerStateChanged;
         public event EventHandler<EventArgs>? Step;
 
-        public PlayerState(IHowl howl, IJSRuntime jsRuntime, MediaRetrievalService mediaRetrievalService) {
+        public PlayerState(IHowl howl, MediaRetrievalService mediaRetrievalService) {
             this.howl = howl;
-            this.jsRuntime = jsRuntime;
             howl.OnEnd += Howl_OnEnd;
             howl.OnLoadError += Howl_OnError;
             howl.OnPlayError += Howl_OnError;
