@@ -36,7 +36,12 @@ namespace Auricular.Api.Controllers {
                     },
                     CookieAuthenticationDefaults.AuthenticationScheme));
 
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties {
+                        IsPersistent = true
+                    });
 
                 return Ok(new LoginResponse {
                     UserName = AppSettings.Value.UserName,

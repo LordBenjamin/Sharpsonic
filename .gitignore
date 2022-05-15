@@ -356,3 +356,4 @@ MigrationBackup/
 /src/Api/auricular.db
 /src/Api/auricular.db-shm
 /src/Api/auricular.db-wal
+/src/Api/keys

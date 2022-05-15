@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Auricular.Api.Media;
@@ -7,9 +8,9 @@ using Auricular.DataAccess.Sqlite;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +18,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Auricular.Api {
     public class Startup {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment) {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
@@ -37,12 +40,16 @@ namespace Auricular.Api {
             services.AddCors();
             services.AddMemoryCache();
 
+            ConfigureDataProtection(services, Environment);
+
             // Require authenticated user by default
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => {
                     // Needed for cookie auth + CORS (https://stackoverflow.com/a/48108964/2048780)
                     options.Cookie.SameSite = SameSiteMode.None;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = TimeSpan.FromDays(30);
 
                     // Prevent ASP.NET Core redirecting to non-existent Identity pages
                     options.Events.OnRedirectToLogin = context => {
@@ -74,6 +81,20 @@ namespace Auricular.Api {
             services.AddSingleton<IMediaLibrary, SqliteMediaLibrary>();
             services.AddSingleton<MediaScanner>();
             services.AddHostedService<MediaLibraryService>();
+        }
+
+        // https://stackoverflow.com/a/65000482/2048780
+        private void ConfigureDataProtection(IServiceCollection services, IWebHostEnvironment environment) {
+            string keysDirectoryName = "keys";
+            string keysDirectoryPath = Path.Combine(environment.ContentRootPath, keysDirectoryName);
+
+            if (!Directory.Exists(keysDirectoryPath)) {
+                Directory.CreateDirectory(keysDirectoryPath);
+            }
+
+            services.AddDataProtection()
+                  .PersistKeysToFileSystem(new DirectoryInfo(keysDirectoryPath))
+                  .SetApplicationName("Auricular");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
