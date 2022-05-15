@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Auricular.Client.Services;
 using Auricular.DataTransfer.Security;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -13,24 +14,49 @@ namespace Auricular.Client.Security {
 
         private ClaimsPrincipal claimsPrincipal = EmptyClaimsPrincipal;
 
-        public CustomAuthStateProvider(AuthenticationService authenticationService) {
+        public CustomAuthStateProvider(AuthenticationService authenticationService, ILocalStorageService localStorage) {
             ArgumentNullException.ThrowIfNull(authenticationService);
+            ArgumentNullException.ThrowIfNull(localStorage);
+
             AuthenticationService = authenticationService;
+            LocalStorage = localStorage;
         }
 
-        public override async Task<AuthenticationState> GetAuthenticationStateAsync() {
-            if (Credential.UserName?.Length > 0) {
-                LoginResponse response = await AuthenticationService.TryLogin(Credential.UserName, Credential.Password);
+        public NetworkCredential Credential { get; private set; } = new NetworkCredential();
 
-                if (response != null) {
-                    claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-                        new Claim(ClaimTypes.NameIdentifier, response.UserName),
+        public string? UserName => claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        public AuthenticationService AuthenticationService { get; }
+        public ILocalStorageService LocalStorage { get; }
+
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync() {
+            const string authStateKey = "authState";
+
+            CustomAuthState? state = await LocalStorage.GetItemAsync<CustomAuthState>(authStateKey);
+
+            if (state?.UserName is string userName) {
+                claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                        new Claim(ClaimTypes.NameIdentifier, userName),
                     }, CookieAuthenticationDefaults.AuthenticationScheme));
+            } else {
+                if (Credential.UserName?.Length > 0) {
+                    LoginResponse? response = await AuthenticationService.TryLogin(Credential.UserName, Credential.Password);
+
+                    if (response != null) {
+                        claimsPrincipal = new ClaimsPrincipal(
+                            new ClaimsIdentity(new Claim[] {
+                                new Claim(ClaimTypes.NameIdentifier, response.UserName),
+                            }, CookieAuthenticationDefaults.AuthenticationScheme));
+
+                        await LocalStorage.SetItemAsync(authStateKey, new CustomAuthState {
+                            UserName = response.UserName,
+                        });
+                    } else {
+                        claimsPrincipal = EmptyClaimsPrincipal;
+                    }
                 } else {
                     claimsPrincipal = EmptyClaimsPrincipal;
                 }
-            } else {
-                claimsPrincipal = EmptyClaimsPrincipal;
             }
 
             return new AuthenticationState(claimsPrincipal);
@@ -42,11 +68,5 @@ namespace Auricular.Client.Security {
             Credential = credential;
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
-
-        public NetworkCredential Credential { get; private set; } = new NetworkCredential();
-
-        public string? UserName => claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        public AuthenticationService AuthenticationService { get; }
     }
 }

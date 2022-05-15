@@ -4,6 +4,7 @@ using Auricular.Client;
 using Auricular.Client.MediaPlayer;
 using Auricular.Client.Security;
 using Auricular.Client.Services;
+using Blazored.LocalStorage;
 using Howler.Blazor.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -28,8 +29,8 @@ builder.Services.AddSingleton(sp => sp.GetRequiredService<IHttpClientFactory>()
 // Configure Auth
 builder.Services.AddAuthorizationCore();
 
-builder.Services.AddSingleton<CustomAuthStateProvider, CustomAuthStateProvider>();
-builder.Services.AddSingleton<AuthenticationStateProvider, CustomAuthStateProvider>(sp => sp.GetService<CustomAuthStateProvider>()!);
+builder.Services.AddScoped<CustomAuthStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>(sp => sp.GetService<CustomAuthStateProvider>()!);
 
 // Configure Player
 builder.Services.AddSingleton<IHowl, Howl>();
@@ -41,5 +42,7 @@ builder.Services.AddSingleton<AlbumSongListService>();
 builder.Services.AddSingleton<MediaRetrievalService>();
 builder.Services.AddSingleton<BrowsingService>();
 builder.Services.AddSingleton<AuthenticationService>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();
