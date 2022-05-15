@@ -8,14 +8,31 @@ li {
   display: inline-block;
 }
 
-  li > a {
+.item-container {
+  position: relative;
+}
+
+  .item-container > a {
     text-decoration: none;
     color: black;
   }
 
-    li > a > p {
+    .item-container > a > p {
       text-align: center;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
     }
+
+    .item-container > a.play-button-overlay {
+      position: absolute;
+      font-size: 50px;
+      bottom: 15px;
+      left: 10px;
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+    }
+
+      .item-container > a.play-button-overlay:hover {
+        color: rgba(255,255,255,0.9);
+      }
