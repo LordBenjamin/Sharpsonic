@@ -55,6 +55,15 @@ namespace Auricular.Client.MediaPlayer {
             await Play(playlist.Items[0]);
         }
 
+        public async ValueTask Play() {
+            if (currentSoundId is int soundId) {
+                await howl.Play(soundId);
+            }
+
+            timer.Start();
+            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public async ValueTask Play(PlaylistItem item) {
             ArgumentNullException.ThrowIfNull(item);
 
@@ -93,6 +102,15 @@ namespace Auricular.Client.MediaPlayer {
 
             TotalTime = e.TotalTime;
 
+            PlayerStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public async ValueTask Pause() {
+            if (currentSoundId is int soundId) {
+                await howl.Pause(soundId);
+            }
+
+            timer.Stop();
             PlayerStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -165,7 +183,7 @@ namespace Auricular.Client.MediaPlayer {
             Step?.Invoke(this, EventArgs.Empty);
         }
 
-        public bool IsPlaying => currentSoundId.HasValue;
+        public bool IsPlaying => currentSoundId.HasValue && timer.Enabled;
 
         public TimeSpan? TotalTime { get; private set; }
 

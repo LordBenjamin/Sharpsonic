@@ -12,8 +12,8 @@
         {
             @if (PlayerState.IsPlaying == true)
             {
-                <a @onclick="async () => await Stop()" style="cursor: pointer">
-                    <span class="oi oi-media-stop media-control-button"></span>
+                <a @onclick="async () => await Pause()" style="cursor: pointer">
+                    <span class="oi oi-media-pause media-control-button"></span>
                 </a>
             }
             else
@@ -39,10 +39,12 @@
 
     public async Task Play()
     {
-        if (PlayerState.CurrentItem is PlaylistItem item)
-        {
-            await PlayerState.Play(item);
-        }
+        await PlayerState.Play();
+    }
+
+    public async Task Pause()
+    {
+        await PlayerState.Pause();
     }
 
     public async Task Stop()
