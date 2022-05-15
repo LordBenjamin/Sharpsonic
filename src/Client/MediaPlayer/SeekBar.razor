@@ -1,0 +1,60 @@
+@implements IDisposable
+<div class="seek-bar">
+    <input
+        style="width: 100%;"
+        type="range"
+        min="0"
+        max="@((Player?.TotalTime ?? TimeSpan.Zero).TotalSeconds)"
+        value="@CurrentTimeSeconds"
+        @oninput="OnInput"
+        hidden=@((Player?.TotalTime ?? TimeSpan.Zero) == TimeSpan.Zero) />
+</div>
+
+@code {
+    [Parameter]
+    public PlayerState? Player { get; set; }
+
+    public double CurrentTimeSeconds { get; set; }
+
+    protected override Task OnParametersSetAsync() {
+        if (Player is PlayerState player) {
+            player.PlayerStateChanged += Player_StateChanged;
+            player.Step += Player_Step;
+        }
+
+        return base.OnParametersSetAsync();
+    }
+
+    public async Task OnInput(ChangeEventArgs e) {
+        if (Player is PlayerState player &&
+            e.Value is not null &&
+            e.Value is string str &&
+            double.TryParse(str, out double value)) {
+
+            await player.Seek(TimeSpan.FromSeconds(value));
+        }
+    }
+
+    private async void Player_Step(object? sender, EventArgs e) {
+        if (Player is PlayerState player) {
+            var timespan = await player.GetCurrentTime();
+            double newValue = timespan?.TotalSeconds ?? -1;
+
+            if(CurrentTimeSeconds != newValue && newValue >= 0) {
+                CurrentTimeSeconds = newValue;
+                StateHasChanged();
+            };
+        }
+    }
+
+    private void Player_StateChanged(object? sender, EventArgs e) {
+        StateHasChanged();
+    }
+
+    public void Dispose() {
+        if (Player is PlayerState player) {
+            player.PlayerStateChanged -= Player_StateChanged;
+            player.PlayerStateChanged -= Player_StateChanged;
+        }
+    }
+}

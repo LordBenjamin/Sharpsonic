@@ -2,12 +2,12 @@
 @inject PlayerState PlayerState;
 @implements IDisposable
 
-<div style="width:100%; text-align:center; padding-top:10px">
-    <div>
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr;">
+    <div style="line-height: 100px; margin-left: 10px;">
         <p>@PlayerState?.CurrentItem?.Title</p>
-        <p>@PlayerState?.CurrentItem?.Album</p>
-        <p>@PlayerState?.CurrentItem?.Artist</p>
+    </div>
 
+    <div style="width:100%; text-align:center; line-height: 100px;">
         @if (PlayerState?.StreamUri is not null)
         {
             @if (PlayerState.IsPlaying == true)
@@ -23,6 +23,10 @@
                 </a>
             }
         }
+    </div>
+
+    <div style="line-height: 100px; max-width: 100px">
+        <SeekBar Player=@PlayerState />
     </div>
 </div>
 
@@ -46,7 +50,7 @@
         await PlayerState.Stop();
     }
 
-    private void Player_StateChanged(object sender, EventArgs e)
+    private void Player_StateChanged(object? sender, EventArgs e)
     {
         StateHasChanged();
     }
