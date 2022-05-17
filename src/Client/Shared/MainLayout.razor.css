@@ -9,17 +9,17 @@ main {
 }
 
 footer {
-  background-color: rgba(0,0,0,0.1);
+  background-color: #161A1E;
   border-top: 1px solid rgba(0,0,0,0.4);
   height: 100px;
 }
 
 .sidebar {
-  background: rgba(0,0,0,0.1);
+  background: #161A1E;
 }
 
 .top-row {
-  background-color: rgba(0,0,0,0.1);
+  background-color: #161A1E;
   border-bottom: 1px solid rgba(0,0,0,0.4);
   justify-content: flex-end;
   height: 3.5rem;
