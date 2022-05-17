@@ -16,20 +16,28 @@
 
 <h2>Chapters</h2>
 
-<ul>
-@foreach(var item in Playlist.Items) {
-    <li>
-        @if (!Player.IsPlayingItem(item)) {
-            <a @onclick="async () => await ItemClicked(item)">
-                <span class="oi oi-play-circle"></span>
-            </a>
-        } else {
-            <span class="oi oi-arrow-right"></span>
+<div style="max-width:640px">
+    <table class="table table-striped">
+        <tbody style="vertical-align: middle;">
+        @foreach(var item in Playlist.Items) {
+            <tr class="@(Player.IsPlayingItem(item) ? "table-primary" : string.Empty)">
+                <td style="width: 32px; font-size: 1.5rem;">
+                @if (!Player.IsPlayingItem(item)) {
+                    <a @onclick="async () => await ItemClicked(item)">
+                        <span class="oi oi-play-circle"></span>
+                    </a>
+                } else {
+                    <span class="oi oi-arrow-right"></span>
+                }
+                </td>
+                <td style="width: 75px;">@(item.TrackSpecified ? $"{item.Track}" : string.Empty)</td>
+                <td>@item.Title</td>
+                <td style="width: 75px;">@(item.DurationSpecified ? string.Format("{0:D2}:{1:D2}", (int) item.Duration.TotalMinutes, item.Duration.Seconds) : string.Empty)</td>
+            </tr>
         }
-        &nbsp;
-        @(item.TrackSpecified ? $"{item.Track}  - " : string.Empty) @item.Title @(item.DurationSpecified ? string.Format("{0:D2}:{1:D2}", (int) item.Duration.TotalMinutes, item.Duration.Seconds) : string.Empty)</li>
-}
-</ul>
+        </tbody>
+    </table>
+</div>
 
 @code {
     public string BookTitle { get; set; } = "Loading";
